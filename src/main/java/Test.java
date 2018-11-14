@@ -8,6 +8,7 @@ import java.util.*;
 
 public class Test {
     public static void main(String[] args) throws IOException {
+
 //
         BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
@@ -21,14 +22,8 @@ public class Test {
         HashMap<Integer, Integer> mapA0 = new HashMap();
         HashMap<Integer, List<String>> mapData = new HashMap();
 
-        List<Double> listA0 = new ArrayList<Double>();
-        List<Double> listB0 = new ArrayList<Double>();
-        List<Double> listData = new ArrayList<Double>();
-
         XYMatrix xyMatrix = new XYMatrix();
 
-        int i = 1;
-        int j = 1;
         int k = 1;
 
         String[] listeB0 = {};
@@ -41,8 +36,6 @@ public class Test {
          */
         while ((listeB0 = readerB0.readNext()) != null) {
             mapB0.put(Integer.valueOf(listeB0[0]), Integer.valueOf(listeB0[1]));
-            listB0.add(Double.valueOf(listeB0[0]+ "." +listeB0[1]));
-            i++;
         }
 
         /*
@@ -51,8 +44,6 @@ public class Test {
          */
         while ((listeA0 = readerA0.readNext()) != null) {
             mapA0.put(Integer.valueOf(listeA0[0]), Integer.valueOf(listeA0[1]));
-            listA0.add(Double.valueOf(listeA0[0]+ "." +listeA0[1]));
-            j++;
         }
 
 
@@ -60,10 +51,9 @@ public class Test {
         Eine Map wird mit den erstene 50 Zeilen der data.csv Datei gefüllt
         Key: Zeilennummer Value: Liste mit den Werten der Zeile
          */
-        for (int q = 0; q < 1000; q++) {
+        for (int q = 0; q < 3000; q++) {
             List<String> line = new ArrayList<String>();
             dataList = readerData.readNext();
-
 
             for (String a : dataList) {
                 line.add(a);
@@ -72,10 +62,16 @@ public class Test {
             mapData.put(k, line);
             k++;
         }
-
-        System.out.println(findObjects(mapA0, xyMatrix));
-        System.out.println(findObjects(mapB0, xyMatrix));
-
+        int ok = 0;
+        for (Map.Entry entryA : mapA0.entrySet()) {
+            if (Integer.valueOf(entryA.getValue().toString()) < 3000) {
+                if (Integer.valueOf(entryA.getKey().toString()) < 3000) {
+                    System.out.println(entryA.getKey()+","+entryA.getValue());
+                    ok++;
+                }
+            }
+        }
+        System.out.println(ok);
     }
 
     public static int find (HashMap map, HashMap zahl) {

@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class XYMatrix {
 
@@ -12,6 +9,7 @@ public class XYMatrix {
             values.get(x).add(value);
         } else {
             values.put(x, new ArrayList<Integer>());
+            values.get(x).add(value);
         }
         return values.get(x).indexOf(value);
     }
@@ -39,10 +37,19 @@ public class XYMatrix {
         return false;
     }
 
+    public Map<Integer, List<Integer>> getValues() {
+        return values;
+    }
+
     @Override
     public String toString() {
-        return "XYMatrix{" +
-                "values=" + values +
-                '}';
+        String ret = "";
+        for (Map.Entry<Integer, List<Integer>> entry : values.entrySet()) {
+            for (Integer e : entry.getValue()) {
+                ret+= e + "\t";
+            }
+            ret+= "\n";
+        }
+        return ret;
     }
 }
