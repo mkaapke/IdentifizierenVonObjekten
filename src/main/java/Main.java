@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        final int datasize = 3000;
+        final int datasize = 1000;
 
         BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
@@ -50,6 +50,10 @@ public class Main {
             mapA0.put(Integer.valueOf(listeA0[0]), Integer.valueOf(listeA0[1]));
         }
 
+        System.out.println(mapA0);
+        System.out.println(mapB0);
+
+
 
         /*
         Eine Map wird mit den erstene 50 Zeilen der data.csv Datei gefüllt
@@ -72,11 +76,13 @@ public class Main {
 
         graphs = findGraphs(xyMatrix);
 
-        for (Graph g : graphs) {
+        System.out.println(graphs);
 
+        for (Graph g : graphs) {
             for (Map.Entry<Integer, Integer> entry : mapA0.entrySet()) {
                 if (g.getxRow() == entry.getValue()) {
-                    if (g.getValues().contains(xyMatrix.get(entry.getValue(), entry.getValue()))) {
+                    System.out.println(entry.getKey() + " - " + entry.getValue());
+                    if (g.getValues().contains(xyMatrix.get(entry.getValue(), entry.getKey()))) {
                         System.out.println("-------A------");
                         System.out.println(g);
                         System.out.println("Steigung LINKS: " + g.riseProcent());
