@@ -5,20 +5,20 @@ import java.util.List;
 
 public class Graph {
 
-    private Integer xRow;
+    private Integer row;
     private List<Integer> values = new ArrayList<Integer>();
     private boolean type; //false = A, true = B
 
-    public Graph(Integer xRow) {
-        this.xRow = xRow;
+    public Graph(Integer row) {
+        this.row = row;
     }
 
-    public Integer getxRow() {
-        return xRow;
+    public Integer getRow() {
+        return row;
     }
 
-    public void setxRow(Integer xRow) {
-        this.xRow = xRow;
+    public void setRow(Integer row) {
+        this.row = row;
     }
 
     public List<Integer> getValues() {
@@ -63,7 +63,7 @@ public class Graph {
 
     @Override
     public String toString() {
-        return "x = " + xRow + " - Graph{" +
+        return "x = " + row + " - Graph{" +
                 "values=" + values +
                 "}\n";
     }

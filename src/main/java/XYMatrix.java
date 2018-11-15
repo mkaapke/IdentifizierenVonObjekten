@@ -37,8 +37,22 @@ public class XYMatrix {
         return false;
     }
 
+    public Set<Map.Entry<Integer, List<Integer>>> entrySet() {
+        return values.entrySet();
+    }
+
     public Map<Integer, List<Integer>> getValues() {
         return values;
+    }
+
+    public XYMatrix rotate() {
+        XYMatrix xyMatrix = new XYMatrix();
+        for (int i = 0 ; i < values.get(0).size() ; i++) {
+            for (int y = 0 ; y < values.size() ; y++) {
+                xyMatrix.put(i, values.get(y).get(i));
+            }
+        }
+        return xyMatrix;
     }
 
     @Override

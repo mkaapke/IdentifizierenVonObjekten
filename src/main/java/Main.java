@@ -13,9 +13,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        final int datasize = 1000;
+        final int datasize = 4;
 
-        BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
+        BufferedReader data = new BufferedReader(new FileReader(new File("src/main/testdata.txt")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
         BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
 
@@ -69,12 +69,16 @@ public class Main {
         readerB0.close();
         readerData.close();
 
-        graphs = findGraphs(xyMatrix);
+        graphs = findXGraphs(xyMatrix);
 
+        System.out.println(findXGraphs(xyMatrix));
+        System.out.println(xyMatrix.rotate());
+        System.out.println(findXGraphs(xyMatrix.rotate()));
 
-        for (Graph g : graphs) {
+        /*for (Graph g : graphs) {
+            if (g.getRow() == 145) System.out.println(g);
             for (Map.Entry<Integer, Integer> entry : mapA0.entrySet()) {
-                if (g.getxRow() == entry.getValue()) {
+                if (g.getRow() == entry.getValue()) {
                     if (g.getValues().contains(xyMatrix.get(entry.getValue(), entry.getKey()))) {
                         System.out.println("-------A------");
                         System.out.println(g);
@@ -85,7 +89,7 @@ public class Main {
                 }
             }
             for (Map.Entry<Integer, Integer> entry : mapB0.entrySet()) {
-                if (g.getxRow() == entry.getValue()) {
+                if (g.getRow() == entry.getValue()) {
                     if (g.getValues().contains(xyMatrix.get(entry.getValue(), entry.getKey()))) {
                         System.out.println("-------B------");
                         System.out.println(g);
@@ -95,47 +99,48 @@ public class Main {
                     }
                 }
             }
-        }
+        }*/
 
     }
 
-    public static List<Graph> findGraphs(XYMatrix xyMatrix) {
+    private static List<Graph> findXGraphs(XYMatrix xyMatrix) {
         List<Graph> graphs = new ArrayList<Graph>();
-        Integer graphNumber = -1;
+        int graphNumber = -1;
 
-        for (Map.Entry<Integer, List<Integer>> entry : xyMatrix.getValues().entrySet()) {
-            Integer acutalValue = entry.getValue().get(0);
-            Integer steigung = -1;
-            for (Integer i : entry.getValue()) {
-                if (i > acutalValue && steigung != 0) {
-                    steigung = 2;
-                }
-                if (i < acutalValue && steigung != 1) {
-                    steigung = 1;
-                }
 
-                if (steigung == 0) {
-                    graphs.get(graphNumber).addValue(i);
+        for (Map.Entry<Integer, List<Integer>> entry : xyMatrix.entrySet()) {
+            Integer currentValue = entry.getValue().get(0);
+            int gradiantState = -1;
+            for (Integer nextValue : entry.getValue()) {
+                if (nextValue > currentValue && gradiantState != 0) {
+                    gradiantState = 2;
+                }
+                if (nextValue < currentValue && gradiantState != 1) {
+                    gradiantState = 1;
                 }
 
-                if (steigung == 1) {
-                    graphs.get(graphNumber).addValue(i);
+                if (gradiantState == 0) {
+                    graphs.get(graphNumber).addValue(nextValue);
                 }
 
-                if (steigung == 2) {
-                    steigung = 0;
+                if (gradiantState == 1) {
+                    graphs.get(graphNumber).addValue(nextValue);
+                }
+
+                if (gradiantState == 2) {
+                    gradiantState = 0;
                     graphNumber++;
                     graphs.add(new Graph(entry.getKey()+1));
-                    graphs.get(graphNumber).addValue(i);
+                    graphs.get(graphNumber).addValue(nextValue);
                 }
 
-                if (steigung == -1) {
-                    steigung = entry.getValue().get(0) < entry.getValue().get(1) ? 0 : 1 ;
+                if (gradiantState == -1) {
+                    gradiantState = entry.getValue().get(0) < entry.getValue().get(1) ? 0 : 1 ;
                     graphNumber++;
                     graphs.add(new Graph(entry.getKey()+1));
-                    graphs.get(graphNumber).addValue(i);
+                    graphs.get(graphNumber).addValue(nextValue);
                 }
-                acutalValue = i;
+                currentValue = nextValue;
 
             }
 

@@ -71,7 +71,7 @@ public class Test {
                 }
             }
         }
-        System.out.println(ok);
+        System.out.println(xyMatrix);
     }
 
     public static int find (HashMap map, HashMap zahl) {
