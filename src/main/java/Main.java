@@ -50,11 +50,6 @@ public class Main {
             mapA0.put(Integer.valueOf(listeA0[0]), Integer.valueOf(listeA0[1]));
         }
 
-        System.out.println(mapA0);
-        System.out.println(mapB0);
-
-
-
         /*
         Eine Map wird mit den erstene 50 Zeilen der data.csv Datei gefüllt
         Key: Zeilennummer Value: Liste mit den Werten der Zeile
@@ -76,12 +71,10 @@ public class Main {
 
         graphs = findGraphs(xyMatrix);
 
-        System.out.println(graphs);
 
         for (Graph g : graphs) {
             for (Map.Entry<Integer, Integer> entry : mapA0.entrySet()) {
                 if (g.getxRow() == entry.getValue()) {
-                    System.out.println(entry.getKey() + " - " + entry.getValue());
                     if (g.getValues().contains(xyMatrix.get(entry.getValue(), entry.getKey()))) {
                         System.out.println("-------A------");
                         System.out.println(g);
@@ -132,14 +125,14 @@ public class Main {
                 if (steigung == 2) {
                     steigung = 0;
                     graphNumber++;
-                    graphs.add(new Graph(entry.getKey()));
+                    graphs.add(new Graph(entry.getKey()+1));
                     graphs.get(graphNumber).addValue(i);
                 }
 
                 if (steigung == -1) {
                     steigung = entry.getValue().get(0) < entry.getValue().get(1) ? 0 : 1 ;
                     graphNumber++;
-                    graphs.add(new Graph(entry.getKey()));
+                    graphs.add(new Graph(entry.getKey()+1));
                     graphs.get(graphNumber).addValue(i);
                 }
                 acutalValue = i;
