@@ -71,9 +71,17 @@ public class Main {
         graphsX = findXGraphs(xyMatrix);
         graphsY = findXGraphs(xyMatrix.rotate());
 
-        System.out.println(graphsX.get(25).gradients());
+        //System.out.println(graphsX.get(25).gradients());
 
-        //System.out.println(getHills(graphsX, graphsY, xyMatrix, mapA0));
+        XYHill aHill = getHills(graphsX, graphsY, xyMatrix, mapA0).get(2);
+        XYHill bHill = getHills(graphsX, graphsY, xyMatrix, mapB0).get(2);
+
+        System.out.println(aHill.getY() + "/" + aHill.getX());
+        System.out.println(aHill.getxRow().gradients());
+        System.out.println(aHill.getyRow().gradients());
+        System.out.println(bHill.getY() + "/" + bHill.getX());
+        System.out.println(bHill.getxRow().gradients());
+        System.out.println(bHill.getyRow().gradients());
 
 
 
@@ -166,7 +174,7 @@ public class Main {
         List<XYHill> hills = new ArrayList<XYHill>();
 
         for (Map.Entry<Integer, Integer> entry : points.entrySet()) {
-            XYHill hill = new XYHill(findGraph(xGraphs, xyMatrix, entry.getValue(), entry.getKey()), findGraph(yGraphs, xyMatrix.rotate(), entry.getKey(), entry.getValue()));
+            XYHill hill = new XYHill(findGraph(xGraphs, xyMatrix, entry.getValue(), entry.getKey()), findGraph(yGraphs, xyMatrix.rotate(), entry.getKey(), entry.getValue()), entry.getValue(), entry.getKey());
             hills.add(hill);
         }
         return hills;
