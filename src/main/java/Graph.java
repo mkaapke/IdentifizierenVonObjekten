@@ -6,7 +6,8 @@ import java.util.List;
 public class Graph {
 
     private Integer row;
-    private List<Integer> values = new ArrayList<Integer>();
+    private List<Integer> valuesZ = new ArrayList<Integer>();
+    private List<Integer> valuesY = new ArrayList<Integer>();
     private boolean type; //false = A, true = B
 
     public Graph(Integer row) {
@@ -21,12 +22,12 @@ public class Graph {
         this.row = row;
     }
 
-    public List<Integer> getValues() {
-        return values;
+    public List<Integer> getValuesZ() {
+        return valuesZ;
     }
 
-    public void setValues(List<Integer> values) {
-        this.values = values;
+    public void setValuesZ(List<Integer> valuesZ) {
+        this.valuesZ = valuesZ;
     }
 
     public boolean isType() {
@@ -37,35 +38,54 @@ public class Graph {
         this.type = type;
     }
 
-    public void addValue(Integer value) {
-        values.add(value);
+    public void addValueZ(Integer value) {
+        valuesZ.add(value);
+    }
+
+    public void addValueY(Integer value) {
+        valuesY.add(value);
     }
 
     public Integer findMin() {
         int min = Integer.MAX_VALUE;
-        for (Integer i : values) min = min < i ? min : i;
+        for (Integer i : valuesZ) min = min < i ? min : i;
         return min;
     }
 
     public Integer findMax() {
         int max = Integer.MIN_VALUE;
-        for (Integer i : values) max = max > i ? max : i;
+        for (Integer i : valuesZ) max = max > i ? max : i;
         return max;
     }
 
-    public double riseProcent() {
-        return round((100.0 / (Double.valueOf(values.get(0))) * findMax()) - 100.00, 2);
+    public boolean containsValueZ(Integer value) {
+        return valuesZ.contains(value);
     }
 
-    public double fallProcent() {
-        return round((100.0 / (Double.valueOf(values.get(values.size()-1))) * findMax()) - 100.00 , 2);
+    public boolean containsValueY(Integer value) {
+        return valuesY.contains(value);
+    }
+
+    public List<Double> gradients() {
+        List<Double> gradients = new ArrayList<Double>();
+
+        int valueBefore = valuesZ.get(0);
+
+        for (Integer currentValue :  valuesZ) {
+            if (currentValue != valueBefore) {
+                gradients.add(round(((100 / Double.valueOf(valueBefore)) * currentValue) - 100.0, 2));
+            }
+        }
+        return gradients;
     }
 
     @Override
     public String toString() {
-        return "x = " + row + " - Graph{" +
-                "values=" + values +
-                "}\n";
+        return "Graph{" +
+                "row=" + row +
+                ", valuesZ=" + valuesZ +
+                ", valuesY=" + valuesY +
+                '}';
     }
 
     public static double round(double value, int places) {

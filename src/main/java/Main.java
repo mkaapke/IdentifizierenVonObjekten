@@ -1,21 +1,19 @@
 import com.opencsv.CSVReader;
+import sun.awt.Symbol;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        final int datasize = 4;
+        final int datasize = 1000;
 
-        BufferedReader data = new BufferedReader(new FileReader(new File("src/main/testdata.txt")));
+        BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
         BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
 
@@ -28,7 +26,8 @@ public class Main {
 
         XYMatrix xyMatrix = new XYMatrix();
 
-        List<Graph> graphs;
+        List<Graph> graphsX;
+        List<Graph> graphsY;
 
         String[] listeB0 = {};
         String[] listeA0 = {};
@@ -69,17 +68,20 @@ public class Main {
         readerB0.close();
         readerData.close();
 
-        graphs = findXGraphs(xyMatrix);
+        graphsX = findXGraphs(xyMatrix);
+        graphsY = findXGraphs(xyMatrix.rotate());
 
-        System.out.println(findXGraphs(xyMatrix));
-        System.out.println(xyMatrix.rotate());
-        System.out.println(findXGraphs(xyMatrix.rotate()));
+        System.out.println(graphsX.get(25).gradients());
+
+        //System.out.println(getHills(graphsX, graphsY, xyMatrix, mapA0));
+
+
 
         /*for (Graph g : graphs) {
             if (g.getRow() == 145) System.out.println(g);
             for (Map.Entry<Integer, Integer> entry : mapA0.entrySet()) {
                 if (g.getRow() == entry.getValue()) {
-                    if (g.getValues().contains(xyMatrix.get(entry.getValue(), entry.getKey()))) {
+                    if (g.getValuesZ().contains(xyMatrix.get(entry.getValue(), entry.getKey()))) {
                         System.out.println("-------A------");
                         System.out.println(g);
                         System.out.println("Steigung LINKS: " + g.riseProcent());
@@ -90,7 +92,7 @@ public class Main {
             }
             for (Map.Entry<Integer, Integer> entry : mapB0.entrySet()) {
                 if (g.getRow() == entry.getValue()) {
-                    if (g.getValues().contains(xyMatrix.get(entry.getValue(), entry.getKey()))) {
+                    if (g.getValuesZ().contains(xyMatrix.get(entry.getValue(), entry.getKey()))) {
                         System.out.println("-------B------");
                         System.out.println(g);
                         System.out.println("Steigung LINKS: " + g.riseProcent());
@@ -111,6 +113,7 @@ public class Main {
         for (Map.Entry<Integer, List<Integer>> entry : xyMatrix.entrySet()) {
             Integer currentValue = entry.getValue().get(0);
             int gradiantState = -1;
+            Integer yTrack = 1;
             for (Integer nextValue : entry.getValue()) {
                 if (nextValue > currentValue && gradiantState != 0) {
                     gradiantState = 2;
@@ -120,25 +123,29 @@ public class Main {
                 }
 
                 if (gradiantState == 0) {
-                    graphs.get(graphNumber).addValue(nextValue);
+                    graphs.get(graphNumber).addValueZ(nextValue);
+                    graphs.get(graphNumber).addValueY(yTrack++);
                 }
 
                 if (gradiantState == 1) {
-                    graphs.get(graphNumber).addValue(nextValue);
+                    graphs.get(graphNumber).addValueZ(nextValue);
+                    graphs.get(graphNumber).addValueY(yTrack++);
                 }
 
                 if (gradiantState == 2) {
                     gradiantState = 0;
                     graphNumber++;
                     graphs.add(new Graph(entry.getKey()+1));
-                    graphs.get(graphNumber).addValue(nextValue);
+                    graphs.get(graphNumber).addValueZ(nextValue);
+                    graphs.get(graphNumber).addValueY(yTrack++);
                 }
 
                 if (gradiantState == -1) {
                     gradiantState = entry.getValue().get(0) < entry.getValue().get(1) ? 0 : 1 ;
                     graphNumber++;
                     graphs.add(new Graph(entry.getKey()+1));
-                    graphs.get(graphNumber).addValue(nextValue);
+                    graphs.get(graphNumber).addValueZ(nextValue);
+                    graphs.get(graphNumber).addValueY(yTrack++);
                 }
                 currentValue = nextValue;
 
@@ -146,6 +153,23 @@ public class Main {
 
         }
         return graphs;
+    }
+
+    private static Graph findGraph(List<Graph> graphs, XYMatrix xyMatrix, Integer x, Integer y) {
+        for (Graph g : graphs) {
+            if (g.containsValueY(y) && g.getRow().equals(x)) return g;
+         }
+        return null;
+    }
+
+    private static List<XYHill> getHills(List<Graph> xGraphs, List<Graph> yGraphs, XYMatrix xyMatrix, Map<Integer, Integer> points) {
+        List<XYHill> hills = new ArrayList<XYHill>();
+
+        for (Map.Entry<Integer, Integer> entry : points.entrySet()) {
+            XYHill hill = new XYHill(findGraph(xGraphs, xyMatrix, entry.getValue(), entry.getKey()), findGraph(yGraphs, xyMatrix.rotate(), entry.getKey(), entry.getValue()));
+            hills.add(hill);
+        }
+        return hills;
     }
 
 }
