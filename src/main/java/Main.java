@@ -1,5 +1,6 @@
 import com.opencsv.CSVReader;
 
+import javax.sound.midi.SysexMessage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -50,6 +51,8 @@ public class Main {
             mapA0.put(Integer.valueOf(listeA0[0]), Integer.valueOf(listeA0[1]));
         }
 
+        System.out.println(mapA0);
+
         /*
         Eine Map wird mit den erstene 50 Zeilen der data.csv Datei gefüllt
         Key: Zeilennummer Value: Liste mit den Werten der Zeile
@@ -64,6 +67,8 @@ public class Main {
                 xyMatrix.put(q+1, toPut);
             }
         }
+
+
 
         readerA0.close();
         readerB0.close();

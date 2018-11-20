@@ -146,6 +146,7 @@ public class XYMatrix {
         return new XYHill(findGraphInRow(x,y), rotate().findGraphInRow(y,x), x, y );
     }
 
+    //UNUSED
     public List<XYGraph> findXGraphs() {
         List<XYGraph> XYGraphs = new ArrayList<XYGraph>();
         int graphNumber = -1;
@@ -199,7 +200,7 @@ public class XYMatrix {
         List<XYHill> hills = new ArrayList<XYHill>();
 
         for (Map.Entry<Integer, Integer> entry : points.entrySet()) {
-            Integer[] maximumPoints = findXYMaxinRange(entry.getKey(), entry.getValue(), 2);
+            Integer[] maximumPoints = findXYMaxinRange(entry.getKey(), entry.getValue(), 10);
             Integer x = maximumPoints[0];
             Integer y = maximumPoints[1];
             XYHill hill = findHill(x, y);
