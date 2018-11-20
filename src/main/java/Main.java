@@ -27,6 +27,7 @@ public class Main {
         List<XYPoint> a0Points = new ArrayList<XYPoint>();
 
         XYMatrix xyMatrix = new XYMatrix();
+        XYHillClassifier classifier = new XYHillClassifier();
 
         List<XYGraph> graphsX;
         List<XYGraph> graphsY;
@@ -75,8 +76,13 @@ public class Main {
 
         List<XYHill> hills = xyMatrix.getHills(a0Points);
 
-        System.out.println(hills);
+        for (XYHill h : hills) {
+            System.out.println(h.getY()+","+h.getX());
+            System.out.println(h);
+            System.out.println("");
+        }
         //System.out.println(xyMatrix.findHill(2,3));
+
 
     }
 

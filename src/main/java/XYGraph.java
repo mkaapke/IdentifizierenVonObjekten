@@ -84,7 +84,6 @@ public class XYGraph {
         return "XYGraph{" +
                 "row=" + row +
                 ", valuesZ=" + valuesZ +
-                ", valuesY=" + valuesY +
                 "}";
     }
 

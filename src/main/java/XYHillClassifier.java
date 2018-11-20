@@ -9,7 +9,8 @@ public class XYHillClassifier {
 
 
     public boolean isAObject(XYHill hill) {
-
+        System.out.println(hill.getxValues().gradients());
+        System.out.println(hill.getyValues().gradients());
         return false;
     }
 

@@ -1,32 +1,32 @@
 public class XYHill {
 
-    private XYGraph xRow;
-    private XYGraph yRow;
+    private XYGraph xValues;
+    private XYGraph yValues;
     private Integer x;
     private Integer y;
     private boolean type = false; //false = A, true = B
 
-    public XYHill(XYGraph xRow, XYGraph yRow, Integer x, Integer y) {
-        this.xRow = xRow;
-        this.yRow = yRow;
+    public XYHill(XYGraph xValues, XYGraph yValues, Integer x, Integer y) {
+        this.xValues = xValues;
+        this.yValues = yValues;
         this.x = x;
         this.y = y;
     }
 
-    public XYGraph getxRow() {
-        return xRow;
+    public XYGraph getxValues() {
+        return xValues;
     }
 
-    public void setxRow(XYGraph xRow) {
-        this.xRow = xRow;
+    public void setxValues(XYGraph xValues) {
+        this.xValues = xValues;
     }
 
     public XYGraph getYrow() {
-        return yRow;
+        return yValues;
     }
 
     public void setYrow(XYGraph yRow) {
-        this.yRow = yRow;
+        this.yValues = yRow;
     }
 
     public boolean isType() {
@@ -37,12 +37,12 @@ public class XYHill {
         this.type = type;
     }
 
-    public XYGraph getyRow() {
-        return yRow;
+    public XYGraph getyValues() {
+        return yValues;
     }
 
-    public void setyRow(XYGraph yRow) {
-        this.yRow = yRow;
+    public void setyValues(XYGraph yValues) {
+        this.yValues = yValues;
     }
 
     public Integer getX() {
@@ -62,6 +62,6 @@ public class XYHill {
     }
 
     public String toString() {
-        return xRow.toString() + "\nX:" + x + " \n" + yRow.toString() + "\nY:" + y;
+        return xValues.toString() + "\nX:" + x + " \n" + yValues.toString() + "\nY:" + y;
     }
 }
