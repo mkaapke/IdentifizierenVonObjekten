@@ -11,9 +11,10 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        final int datasize = 1000;
+        final int datasize = 5;
 
-        BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
+        //BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
+        BufferedReader data = new BufferedReader(new FileReader(new File("src/main/testdata.txt")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
         BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
 
@@ -68,6 +69,9 @@ public class Main {
         readerB0.close();
         readerData.close();
 
+        System.out.println(xyMatrix);
+        System.out.println(xyMatrix.findXYMaxinRange(3,3,1)[0] + "/" + xyMatrix.findXYMaxinRange(3,3,1)[1]);
+
         graphsX = findXGraphs(xyMatrix);
         graphsY = findXGraphs(xyMatrix.rotate());
 
@@ -81,7 +85,7 @@ public class Main {
         System.out.println(aHill.getyRow().gradients());
         System.out.println(bHill.getY() + "/" + bHill.getX());
         System.out.println(bHill.getxRow().gradients());
-        System.out.println(bHill.getyRow().gradients());
+        System.out.println(bHill.getyRow().gradients()); 
 
 
 
@@ -179,5 +183,6 @@ public class Main {
         }
         return hills;
     }
+
 
 }

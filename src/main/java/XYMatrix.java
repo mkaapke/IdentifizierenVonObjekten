@@ -13,7 +13,7 @@ public class XYMatrix {
         }
         return values.get(x).indexOf(value);
     }
-//
+
     public int get(int x, int y) {
         if (values.containsKey(x)) {
             if (values.get(x).size() > y) {
@@ -41,10 +41,6 @@ public class XYMatrix {
         return values.entrySet();
     }
 
-    public Map<Integer, List<Integer>> getValues() {
-        return values;
-    }
-
     public XYMatrix rotate() {
         XYMatrix xyMatrix = new XYMatrix();
         for (int i = 0 ; i < values.get(0).size() ; i++) {
@@ -54,6 +50,44 @@ public class XYMatrix {
         }
         return xyMatrix;
     }
+
+    public XYMatrix snipMatrix(Integer x, Integer y, Integer range) {
+        XYMatrix snippetMatrix = new XYMatrix();
+
+        for (int i = -range-1 ; i < range ; i++ ) {
+            for (int j = -range-1; j < range; j++) {
+                if (x + i >= 0 && y + j >= 0) {
+                    snippetMatrix.put(x + i, this.get(x + i, y + j));
+                }
+            }
+        }
+        return snippetMatrix;
+    }
+
+    public Integer findMaxValue() {
+        Integer max = -Integer.MAX_VALUE;
+        for (Map.Entry<Integer, List<Integer>> entry : values.entrySet()) {
+            for (Integer i : entry.getValue()) {
+                max = i > max ? i : max;
+            }
+        }
+        return max;
+    }
+
+    public Integer[] findXYMaxinRange(Integer x, Integer y, Integer range) {
+        Integer max = snipMatrix(x, y, range).findMaxValue();
+        for (int i = -range-1 ; i < range ; i++ ) {
+            for (int j = -range-1; j < range; j++) {
+                if (this.get(x+i, y+j) == max) {
+                    return new Integer[]{x+i+range, y+j+range};
+                }
+
+            }
+        }
+        return new Integer[]{0, 0};
+    }
+
+
 
     @Override
     public String toString() {
@@ -66,4 +100,5 @@ public class XYMatrix {
         }
         return ret;
     }
+
 }
