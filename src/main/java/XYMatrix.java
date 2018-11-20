@@ -196,11 +196,11 @@ public class XYMatrix {
         return XYGraphs;
     }
 
-    public List<XYHill> getHills(Map<Integer, Integer> points) {
+    public List<XYHill> getHills(List<XYPoint> points) {
         List<XYHill> hills = new ArrayList<XYHill>();
 
-        for (Map.Entry<Integer, Integer> entry : points.entrySet()) {
-            Integer[] maximumPoints = findXYMaxinRange(entry.getKey(), entry.getValue(), 10);
+        for (XYPoint p : points) {
+            Integer[] maximumPoints = findXYMaxinRange(p.getY(), p.getX(), 2);
             Integer x = maximumPoints[0];
             Integer y = maximumPoints[1];
             XYHill hill = findHill(x, y);

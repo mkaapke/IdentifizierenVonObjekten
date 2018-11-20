@@ -11,12 +11,12 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        final int datasize = 3000;
+        final int datasize = 4;
 
-        BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
-        //BufferedReader data = new BufferedReader(new FileReader(new File("src/main/testdata.txt")));
-        //BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/testdataA")));
-        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
+        //BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
+        BufferedReader data = new BufferedReader(new FileReader(new File("src/main/testdata.txt")));
+        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/testdataA")));
+        //BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
 
         CSVReader readerB0 = new CSVReader(b0);
@@ -24,7 +24,7 @@ public class Main {
         CSVReader readerData = new CSVReader(data);
 
         HashMap<Integer, Integer> mapB0 = new HashMap();
-        HashMap<Integer, Integer> mapA0 = new HashMap();
+        List<XYPoint> a0Points = new ArrayList<XYPoint>();
 
         XYMatrix xyMatrix = new XYMatrix();
 
@@ -48,10 +48,9 @@ public class Main {
         Key: Zeilennummer  Value: String mit dem Wert der Zeile
          */
         while ((listeA0 = readerA0.readNext()) != null) {
-            mapA0.put(Integer.valueOf(listeA0[0]), Integer.valueOf(listeA0[1]));
+            a0Points.add(new XYPoint(Integer.valueOf(listeA0[1]), Integer.valueOf(listeA0[0])));
         }
 
-        System.out.println(mapA0);
 
         /*
         Eine Map wird mit den erstene 50 Zeilen der data.csv Datei gefüllt
@@ -74,9 +73,10 @@ public class Main {
         readerB0.close();
         readerData.close();
 
-        List<XYHill> hills = xyMatrix.getHills(mapA0);
+        List<XYHill> hills = xyMatrix.getHills(a0Points);
 
         System.out.println(hills);
+        //System.out.println(xyMatrix.findHill(2,3));
 
     }
 
