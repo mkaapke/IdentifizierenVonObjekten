@@ -11,11 +11,13 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        final int datasize = 1000;
+        final int datasize = 4;
 
-        BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
+        //BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
+        BufferedReader data = new BufferedReader(new FileReader(new File("src/main/testdata.txt")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
-        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
+       // BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
+        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/testdataA")));
 
         CSVReader readerB0 = new CSVReader(b0);
         CSVReader readerA0 = new CSVReader(a0);
@@ -73,16 +75,17 @@ public class Main {
 
         //System.out.println(graphsX.get(25).gradients());
 
-        XYHill aHill = getHills(graphsX, graphsY, xyMatrix, mapA0).get(2);
-        XYHill bHill = getHills(graphsX, graphsY, xyMatrix, mapB0).get(2);
+        XYHill aHill = getHills(graphsX, graphsY, xyMatrix, mapA0).get(0);
+       // XYHill bHill = getHills(graphsX, graphsY, xyMatrix, mapB0).get(1);
 
+        System.out.println(xyMatrix);
+        System.out.println(xyMatrix.rotate());
         System.out.println(aHill.getY() + "/" + aHill.getX());
-        System.out.println(aHill.getxRow().gradients());
-        System.out.println(aHill.getyRow().gradients());
-        System.out.println(bHill.getY() + "/" + bHill.getX());
+        System.out.println(aHill.getxRow());
+        System.out.println(aHill.getyRow());
+        /*System.out.println(bHill.getY() + "/" + bHill.getX());
         System.out.println(bHill.getxRow().gradients());
-        System.out.println(bHill.getyRow().gradients());
-
+        System.out.println(bHill.getyRow().gradients());*/
 
 
         /*for (Graph g : graphs) {
@@ -164,11 +167,22 @@ public class Main {
     }
 
     private static Graph findGraph(List<Graph> graphs, XYMatrix xyMatrix, Integer x, Integer y) {
+        List<Graph> ichteste = new ArrayList<Graph>();
         for (Graph g : graphs) {
-            if (g.containsValueY(y) && g.getRow().equals(x)) return g;
+            if (g.containsValueY(y)) ichteste.add(g);
          }
-        return null;
+         Integer mex = ichteste.get(0).findMax();
+        Graph test = ichteste.get(0);
+         for (Graph g : ichteste) {
+             if (mex < g.findMax()) {
+                 mex = g.findMax();
+                 test = g;
+             }
+         }
+        return test;
     }
+
+    public
 
     private static List<XYHill> getHills(List<Graph> xGraphs, List<Graph> yGraphs, XYMatrix xyMatrix, Map<Integer, Integer> points) {
         List<XYHill> hills = new ArrayList<XYHill>();
