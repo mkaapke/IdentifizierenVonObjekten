@@ -3,14 +3,14 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Graph {
+public class XYGraph {
 
     private Integer row;
     private List<Integer> valuesZ = new ArrayList<Integer>();
     private List<Integer> valuesY = new ArrayList<Integer>();
     private boolean type; //false = A, true = B
 
-    public Graph(Integer row) {
+    public XYGraph(Integer row) {
         this.row = row;
     }
 
@@ -81,11 +81,11 @@ public class Graph {
 
     @Override
     public String toString() {
-        return "Graph{" +
+        return "XYGraph{" +
                 "row=" + row +
                 ", valuesZ=" + valuesZ +
                 ", valuesY=" + valuesY +
-                '}';
+                "}";
     }
 
     public static double round(double value, int places) {

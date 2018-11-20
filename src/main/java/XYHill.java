@@ -1,31 +1,31 @@
 public class XYHill {
 
-    private Graph xRow;
-    private Graph yRow;
+    private XYGraph xRow;
+    private XYGraph yRow;
     private Integer x;
     private Integer y;
     private boolean type = false; //false = A, true = B
 
-    public XYHill(Graph xRow, Graph yRow, Integer x, Integer y) {
+    public XYHill(XYGraph xRow, XYGraph yRow, Integer x, Integer y) {
         this.xRow = xRow;
         this.yRow = yRow;
         this.x = x;
         this.y = y;
     }
 
-    public Graph getxRow() {
+    public XYGraph getxRow() {
         return xRow;
     }
 
-    public void setxRow(Graph xRow) {
+    public void setxRow(XYGraph xRow) {
         this.xRow = xRow;
     }
 
-    public Graph getYrow() {
+    public XYGraph getYrow() {
         return yRow;
     }
 
-    public void setYrow(Graph yRow) {
+    public void setYrow(XYGraph yRow) {
         this.yRow = yRow;
     }
 
@@ -37,11 +37,11 @@ public class XYHill {
         this.type = type;
     }
 
-    public Graph getyRow() {
+    public XYGraph getyRow() {
         return yRow;
     }
 
-    public void setyRow(Graph yRow) {
+    public void setyRow(XYGraph yRow) {
         this.yRow = yRow;
     }
 
@@ -62,6 +62,6 @@ public class XYHill {
     }
 
     public String toString() {
-        return xRow.toString() + "\nMax:" + x + " \n" + yRow.toString() + "\nMax:" + y;
+        return xRow.toString() + "\nX:" + x + " \n" + yRow.toString() + "\nY:" + y;
     }
 }
