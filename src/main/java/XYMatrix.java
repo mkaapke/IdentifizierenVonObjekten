@@ -96,6 +96,7 @@ public class XYMatrix {
         return new Integer[]{0, 0};
     }
 
+    //DAS MUSS ERKLÄRT WERDEN o.O
     public XYGraph findGraphInRow(Integer x, Integer y) {
         List<XYGraph> XYGraphs = new ArrayList<XYGraph>();
         int graphNumber = -1;
