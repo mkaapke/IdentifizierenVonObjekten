@@ -11,12 +11,12 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        final int datasize = 4;
+        final int datasize = 3000;
 
-        //BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
-        BufferedReader data = new BufferedReader(new FileReader(new File("src/main/testdata.txt")));
-        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/testdataA")));
-        //BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
+        BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
+        //BufferedReader data = new BufferedReader(new FileReader(new File("src/main/testdata.txt")));
+        //BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/testdataA")));
+        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
 
         CSVReader readerB0 = new CSVReader(b0);
