@@ -46,6 +46,10 @@ public class XYGraph {
         valuesY.add(value);
     }
 
+    public int getSize(){
+        return valuesZ.size();
+    }
+
     public Integer findMin() {
         int min = Integer.MAX_VALUE;
         for (Integer i : valuesZ) min = min < i ? min : i;
@@ -75,6 +79,7 @@ public class XYGraph {
             if (currentValue != valueBefore) {
                 gradients.add(round(((100 / Double.valueOf(valueBefore)) * currentValue) - 100.0, 2));
             }
+            valueBefore = currentValue;
         }
         return gradients;
     }
@@ -87,7 +92,41 @@ public class XYGraph {
                 "}";
     }
 
-    public static double round(double value, int places) {
+    //UNUSED
+    public XYGraph rangeFormTop(Integer range) {
+        XYGraph graph = new XYGraph(this.row);
+
+        for (int i = (this.valuesZ.indexOf(this.findMax()) - range) ; i <= this.valuesZ.indexOf(this.findMax()) + range ; i++) {
+            if (i >= 0 && i < valuesZ.size()) graph.addValueZ(valuesZ.get(i));
+        }
+
+        return graph;
+    }
+
+    public XYGraph downGraph() {
+        XYGraph graph = new XYGraph(this.row);
+        Integer max = this.findMax();
+
+        for (int i = valuesZ.indexOf(max) ; i < valuesZ.size() ; i++) {
+            graph.addValueZ(valuesZ.get(i));
+        }
+
+        return graph;
+    }
+
+    public XYGraph upGraph() {
+        XYGraph graph = new XYGraph(this.row);
+        Integer max = this.findMax();
+
+        for (int i = 0 ; i < valuesZ.indexOf(max); i++) {
+            graph.addValueZ(valuesZ.get(i));
+        }
+
+        return graph;
+    }
+
+
+        public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
         BigDecimal bd = new BigDecimal(value);

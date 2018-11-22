@@ -11,13 +11,14 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        final int datasize = 3000;
+        final int datasize = 4942;
 
         BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
         //BufferedReader data = new BufferedReader(new FileReader(new File("src/main/testdata.txt")));
         //BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/testdataA")));
         BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
+        //BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/testdataB")));
 
         CSVReader readerB0 = new CSVReader(b0);
         CSVReader readerA0 = new CSVReader(a0);
@@ -25,6 +26,7 @@ public class Main {
 
         HashMap<Integer, Integer> mapB0 = new HashMap();
         List<XYPoint> a0Points = new ArrayList<XYPoint>();
+        List<XYPoint> b0Points = new ArrayList<XYPoint>();
 
         XYMatrix xyMatrix = new XYMatrix();
         XYHillClassifier classifier = new XYHillClassifier();
@@ -41,7 +43,7 @@ public class Main {
         Key: Zeilennummer  Value: String mit dem Wert der Zeile
          */
         while ((listeB0 = readerB0.readNext()) != null) {
-            mapB0.put(Integer.valueOf(listeB0[0]), Integer.valueOf(listeB0[1]));
+            b0Points.add(new XYPoint(Integer.valueOf(listeB0[1]), Integer.valueOf(listeB0[0])));
         }
 
         /*
@@ -75,13 +77,12 @@ public class Main {
         readerData.close();
 
         List<XYHill> hills = xyMatrix.getHills(a0Points);
+        for (XYHill h : hills) classifier.isAObject(h);
 
-        for (XYHill h : hills) {
-            System.out.println(h.getY()+","+h.getX());
-            System.out.println(h);
-            System.out.println("");
-        }
-        //System.out.println(xyMatrix.findHill(2,3));
+        System.out.println("--------------------");
+        hills = xyMatrix.getHills(b0Points);
+        for (XYHill h : hills) classifier.isAObject(h);
+
 
 
     }

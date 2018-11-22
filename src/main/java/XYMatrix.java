@@ -2,7 +2,7 @@ import java.util.*;
 
 public class XYMatrix {
 
-    private static int range = 20;
+    private static int range = 1;
 
     private Map<Integer, List<Integer>> values = new HashMap();
     private XYMatrix rotated = null;
@@ -58,9 +58,8 @@ public class XYMatrix {
 
     public XYMatrix snipMatrix(Integer x, Integer y, Integer range) {
         XYMatrix snippetMatrix = new XYMatrix();
-
-        for (int i = -range - 1; i < range; i++) {
-            for (int j = -range - 1; j < range; j++) {
+        for (int i = -range; i < range+1; i++) {
+            for (int j = -range; j < range+1; j++) {
                 if (x + i >= 0 && (y - 1) + j >= 0) {
                     if (this.get(x + i, y + j) != 0) { //ACHTUNG
                         snippetMatrix.put(x + i, this.get(x + i, y + j));
@@ -93,7 +92,7 @@ public class XYMatrix {
 
             }
         }
-        return new Integer[]{0, 0};
+        return new Integer[]{x, y};
     }
 
     //DAS MUSS ERKLÄRT WERDEN o.O
@@ -206,7 +205,7 @@ public class XYMatrix {
         List<XYHill> hills = new ArrayList<XYHill>();
 
         for (XYPoint p : points) {
-            Integer[] maximumPoints = findXYMaxinRange(p.getY(), p.getX(), range);
+            Integer[] maximumPoints = findXYMaxinRange(p.getX(), p.getY(), range);
             Integer x = maximumPoints[0];
             Integer y = maximumPoints[1];
             XYHill hill = findHill(x, y);
