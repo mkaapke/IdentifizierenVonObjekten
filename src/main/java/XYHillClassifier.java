@@ -23,8 +23,9 @@ public class XYHillClassifier {
 
         System.out.println(hill.getxValues());
         System.out.println(hill.getxValues().gradients());
-        System.out.println(hill.getyValues());
-        System.out.println(hill.getyValues().gradients() + "\n");
+        System.out.println(hill.getyValues().gradients());
+        System.out.println(hill.getyValues() + "\n");
+
 
         return flatness(hill) < 50 ? 0 : 1;
     }

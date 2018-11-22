@@ -2,7 +2,7 @@ import java.util.*;
 
 public class XYMatrix {
 
-    private static int range = 1;
+    private static int range = 10;
 
     private Map<Integer, List<Integer>> values = new HashMap();
     private XYMatrix rotated = null;
@@ -58,11 +58,11 @@ public class XYMatrix {
 
     public XYMatrix snipMatrix(Integer x, Integer y, Integer range) {
         XYMatrix snippetMatrix = new XYMatrix();
-        for (int i = -range; i < range+1; i++) {
-            for (int j = -range; j < range+1; j++) {
-                if (x + i >= 0 && (y - 1) + j >= 0) {
-                    if (this.get(x + i, y + j) != 0) { //ACHTUNG
-                        snippetMatrix.put(x + i, this.get(x + i, y + j));
+        for (int i = x - range ; i <= x + range ; i++) {
+            for (int j = y - range; j < y + range + 1; j++) {
+                if (i >= 0 && (j-1) >= 0) {
+                    if (this.get(i, j) != 0) { //ACHTUNG
+                        snippetMatrix.put(i, get(i, j));
                     }
                 }
             }
@@ -70,7 +70,23 @@ public class XYMatrix {
         return snippetMatrix;
     }
 
-    public Integer findMaxValue() {
+    public Integer[] findXYMaxinRange(Integer x, Integer y, Integer range) {
+        Integer max = snipMatrix(x, y, range).findMaxValueXY();
+        for (int i = x - range; i <= x + range; i++) {
+            for (int j = y - range; j < y + range + 1; j++) {
+                if (i >= 0 && (j - 1) >= 0) {
+                    if (this.get(i, j) == max) {
+                        return new Integer[]{i, j};
+                    }
+                }
+            }
+        }
+
+
+        return new Integer[]{0,0};
+    }
+
+    public Integer findMaxValueXY() {
         Integer max = -Integer.MAX_VALUE;
         for (Map.Entry<Integer, List<Integer>> entry : values.entrySet()) {
             for (Integer i : entry.getValue()) {
@@ -80,69 +96,21 @@ public class XYMatrix {
         return max;
     }
 
-    public Integer[] findXYMaxinRange(Integer x, Integer y, Integer range) {
-        Integer max = snipMatrix(x, y, range).findMaxValue();
-        for (int i = -range; i < range+1; i++) {
-            for (int j = -range; j < range+1; j++) {
-                if (x + i >= 0 && (y - 1) + j >= 0) {
-                    if (this.get(x + i, y + j) == max) {
-                        return new Integer[]{x + i, y + j};
-                    }
-                }
-            }
-        }
-        return new Integer[]{0,0};
-    }
-
-    //DAS MUSS ERKLÄRT WERDEN o.O
     public XYGraph findGraphInRow(Integer x, Integer y) {
-        List<XYGraph> XYGraphs = new ArrayList<XYGraph>();
-        int graphNumber = -1;
-        List<Integer> row = values.get(x);
-        Integer currentValue = row.get(0);
-        int gradiantState = -1;
-        Integer yTrack = 1;
-        for (Integer nextValue : row) {
-            if (nextValue > currentValue && gradiantState != 0) {
-                gradiantState = 2;
-            }
-            if (nextValue < currentValue && gradiantState != 1) {
-                gradiantState = 1;
-            }
-
-            if (gradiantState == 0) {
-                XYGraphs.get(graphNumber).addValueZ(nextValue);
-                XYGraphs.get(graphNumber).addValueY(yTrack++);
-            }
-
-            if (gradiantState == 1) {
-                XYGraphs.get(graphNumber).addValueZ(nextValue);
-                XYGraphs.get(graphNumber).addValueY(yTrack++);
-            }
-
-            if (gradiantState == 2) {
-                gradiantState = 0;
-                graphNumber++;
-                XYGraphs.add(new XYGraph(x));
-                XYGraphs.get(graphNumber).addValueZ(nextValue);
-                XYGraphs.get(graphNumber).addValueY(yTrack++);
-            }
-
-            if (gradiantState == -1) {
-                gradiantState = row.get(0) < row.get(1) ? 0 : 1;
-                graphNumber++;
-                XYGraphs.add(new XYGraph(x));
-                XYGraphs.get(graphNumber).addValueZ(nextValue);
-                XYGraphs.get(graphNumber).addValueY(yTrack++);
-            }
-            currentValue = nextValue;
-
+        int begin = y;
+        int end = y;
+        XYGraph graph = new XYGraph(y);
+        while (begin-1 > 1 && get(x,begin) > get(x, begin-1) ) {
+            begin--;
         }
-
-        for (XYGraph g : XYGraphs) {
-            if (g.containsValueY(y)) return g;
+        while (get(x,end) > get(x,end+1)) {
+            end++;
         }
-        return null;
+        for (int i = begin ; i <= end ; i++ ) {
+
+            graph.addValueZ(get(x, i));
+        }
+        return graph;
 
     }
 
@@ -217,13 +185,24 @@ public class XYMatrix {
     @Override
     public String toString() {
         String ret = "";
-        for (Map.Entry<Integer, List<Integer>> entry : values.entrySet()) {
+
+        for (int i = 0 ;  i < Main.datasize ; i++ ) {
+            if (values.containsKey(i)) {
+                ret+= i + ": ";
+                for (Integer e : values.get(i)) {
+                    ret += e + "\t";
+                }
+                ret+="\n";
+            }
+        }
+        return ret;
+        /*for (Map.Entry<Integer, List<Integer>> entry : values.entrySet()) {
             for (Integer e : entry.getValue()) {
                 ret += e + "\t";
             }
             ret += "\n";
         }
-        return ret;
+        return ret;*/
     }
 
 }

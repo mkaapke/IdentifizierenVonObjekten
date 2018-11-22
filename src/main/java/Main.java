@@ -9,16 +9,18 @@ import java.util.*;
 
 public class Main {
 
+    final static int datasize = 1000;
+
     public static void main(String[] args) throws IOException {
 
-        final int datasize = 4942;
 
+        /*BufferedReader data = new BufferedReader(new FileReader(new File("src/main/testdata.txt")));
+        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/testdataA")));
+        BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/testdataB")));*/
         BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
-        //BufferedReader data = new BufferedReader(new FileReader(new File("src/main/testdata.txt")));
-        //BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/testdataA")));
         BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
-        //BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/testdataB")));
+
 
         CSVReader readerB0 = new CSVReader(b0);
         CSVReader readerA0 = new CSVReader(a0);
@@ -76,7 +78,9 @@ public class Main {
 
         List<XYHill> hills = xyMatrix.getHills(a0Points);
         int counter = 0;
-        for (XYHill h : hills) counter+= classifier.isAObject(h) == 0 ? 1 : 0;
+        for (XYHill h : hills) {
+            counter+= classifier.isAObject(h) == 0 ? 1 : 0;
+        }
 
         System.out.println("----" + counter);
 
