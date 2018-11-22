@@ -10,7 +10,7 @@ public class XYHillClassifier {
 
     public static double attributeDropAverage = 0.;
 
-    public static double attributeFlatness = 0.1;
+    public static double attributeFlatness = 0.2;
 
     public boolean isBObject(XYHill hill) {
 
@@ -20,14 +20,12 @@ public class XYHillClassifier {
 
     public boolean isAObject(XYHill hill) {
 
-        System.out.println(hill.getxValues());
+        System.out.println(flatness(hill));
+
+        /*System.out.println(hill.getxValues());
         System.out.println(hill.getyValues());
 
         Integer before = hill.getxValues().getValuesZ().get(0);
-        //System.out.println(hill.getxValues());
-        //System.out.println(hill.getyValues());
-        //System.out.println(hill.getxValues().gradients());
-        //System.out.println(hill.getyValues().gradients());
         Double dss = 0.0;
         for (Double d : hill.getxValues().gradients()) {
             dss+= d;
@@ -39,7 +37,9 @@ public class XYHillClassifier {
             dss+= d;
             System.out.print(d + " = ");
         }
-        System.out.println(dss / hill.getxValues().gradients().size() + "\n");
+        System.out.println(dss / hill.getxValues().gradients().size() + "\n");*/
+
+
         //System.out.println(hill.getxValues().gradients());
         //System.out.println(hill.getyValues().gradients() + "\n");
         /*SimpleRegression simpleRegressionXUp = new SimpleRegression(true);
@@ -100,6 +100,16 @@ public class XYHillClassifier {
             if (d > attributeDropAverage) point++ ;
         }
         return 0;
+    }
+
+    public Integer flatness(XYHill hill) {
+        Integer flatness = 0;
+
+        for (Double d : hill.getxValues().gradients()) if (d < attributeFlatness &&  d > -attributeFlatness) flatness++;
+
+        for (Double d : hill.getyValues().gradients()) if (d < attributeFlatness &&  d > -attributeFlatness) flatness++;
+
+        return flatness;
     }
 
     public double proportionOfAObject(List<XYHill> aHills) {
