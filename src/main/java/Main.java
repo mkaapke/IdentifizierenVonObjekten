@@ -70,18 +70,22 @@ public class Main {
             }
         }
 
-
-
         readerA0.close();
         readerB0.close();
         readerData.close();
 
         List<XYHill> hills = xyMatrix.getHills(a0Points);
-        for (XYHill h : hills) classifier.isAObject(h);
+        int counter = 0;
+        for (XYHill h : hills) counter+= classifier.isAObject(h) == 0 ? 1 : 0;
 
+        System.out.println("----" + counter);
+
+        counter = 0;
         System.out.println("--------------------");
         hills = xyMatrix.getHills(b0Points);
-        for (XYHill h : hills) classifier.isAObject(h);
+        for (XYHill h : hills) counter+= classifier.isAObject(h) != 0 ? 1 : 0;
+
+        System.out.println("----" + counter);
 
 
 

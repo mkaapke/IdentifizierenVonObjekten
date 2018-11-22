@@ -4,7 +4,7 @@ public class XYHill {
     private XYGraph yValues;
     private Integer x;
     private Integer y;
-    private boolean type = false; //false = A, true = B
+    private Integer type = -1; //0 = A, 1 = B
 
     public XYHill(XYGraph xValues, XYGraph yValues, Integer x, Integer y) {
         this.xValues = xValues;
@@ -29,11 +29,11 @@ public class XYHill {
         this.yValues = yRow;
     }
 
-    public boolean isType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(boolean type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 

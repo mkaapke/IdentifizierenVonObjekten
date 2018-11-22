@@ -82,17 +82,16 @@ public class XYMatrix {
 
     public Integer[] findXYMaxinRange(Integer x, Integer y, Integer range) {
         Integer max = snipMatrix(x, y, range).findMaxValue();
-        for (int i = -range - 1; i < range; i++) {
-            for (int j = -range - 1; j < range; j++) {
+        for (int i = -range; i < range+1; i++) {
+            for (int j = -range; j < range+1; j++) {
                 if (x + i >= 0 && (y - 1) + j >= 0) {
                     if (this.get(x + i, y + j) == max) {
                         return new Integer[]{x + i, y + j};
                     }
                 }
-
             }
         }
-        return new Integer[]{x, y};
+        return new Integer[]{0,0};
     }
 
     //DAS MUSS ERKLÄRT WERDEN o.O
