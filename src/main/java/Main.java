@@ -10,6 +10,7 @@ import java.util.*;
 public class Main {
 
     final static int datasize = 1000;
+    final static int testdata = 100;
 
     public static void main(String[] args) throws IOException {
 
@@ -31,7 +32,7 @@ public class Main {
         List<XYPoint> b0Points = new ArrayList<XYPoint>();
 
         XYMatrix xyMatrix = new XYMatrix();
-        XYHillClassifier classifier = new XYHillClassifier();
+        XYHillClassifier classifier = new XYHillClassifier(xyMatrix);
 
         List<XYGraph> graphsX;
         List<XYGraph> graphsY;
@@ -44,16 +45,27 @@ public class Main {
         Eine Map wird mit den Daten der Datei B0.csv gefüllt
         Key: Zeilennummer  Value: String mit dem Wert der Zeile
          */
+         int counter = 0;
         while ((listeB0 = readerB0.readNext()) != null) {
-            b0Points.add(new XYPoint(Integer.valueOf(listeB0[1]), Integer.valueOf(listeB0[0])));
+            if (Integer.valueOf(listeB0[1]) < datasize) {
+                b0Points.add(new XYPoint(Integer.valueOf(listeB0[1]), Integer.valueOf(listeB0[0])));
+                counter++;
+            }
+            if (counter == testdata) break;
+
         }
 
         /*
         Eine Map wird mit den Daten der Datei A0.csv gefüllt
         Key: Zeilennummer  Value: String mit dem Wert der Zeile
          */
+        counter = 0;
         while ((listeA0 = readerA0.readNext()) != null) {
-            a0Points.add(new XYPoint(Integer.valueOf(listeA0[1]), Integer.valueOf(listeA0[0])));
+            if (Integer.valueOf(listeA0[1]) < datasize) {
+                a0Points.add(new XYPoint(Integer.valueOf(listeA0[1]), Integer.valueOf(listeA0[0])));
+                counter++;
+            }
+            if (counter == testdata) break;
         }
 
 
@@ -77,9 +89,9 @@ public class Main {
         readerData.close();
 
         List<XYHill> hills = xyMatrix.getHills(a0Points);
-        int counter = 0;
+        counter = 0;
         for (XYHill h : hills) {
-            counter+= classifier.isAObject(h) == 0 ? 1 : 0;
+            counter+= classifier.isAObject(h);
         }
 
         System.out.println("----" + counter);
@@ -87,7 +99,7 @@ public class Main {
         counter = 0;
         System.out.println("--------------------");
         hills = xyMatrix.getHills(b0Points);
-        for (XYHill h : hills) counter+= classifier.isAObject(h) != 0 ? 1 : 0;
+        for (XYHill h : hills) counter+= classifier.isAObject(h);
 
         System.out.println("----" + counter);
 

@@ -73,6 +73,8 @@ public class XYGraph {
     public List<Double> gradients() {
         List<Double> gradients = new ArrayList<Double>();
 
+        if (valuesZ.isEmpty()) return gradients;
+
         int valueBefore = valuesZ.get(0);
 
         for (Integer currentValue :  valuesZ) {
@@ -92,16 +94,6 @@ public class XYGraph {
                 "}";
     }
 
-    //UNUSED
-    public XYGraph rangeFormTop(Integer range) {
-        XYGraph graph = new XYGraph(this.row);
-
-        for (int i = (this.valuesZ.indexOf(this.findMax()) - range) ; i <= this.valuesZ.indexOf(this.findMax()) + range ; i++) {
-            if (i >= 0 && i < valuesZ.size()) graph.addValueZ(valuesZ.get(i));
-        }
-
-        return graph;
-    }
 
     public XYGraph downGraph() {
         XYGraph graph = new XYGraph(this.row);
