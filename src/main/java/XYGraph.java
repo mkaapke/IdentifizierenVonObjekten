@@ -1,6 +1,7 @@
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class XYGraph {
@@ -99,7 +100,7 @@ public class XYGraph {
         XYGraph graph = new XYGraph(this.row);
         Integer max = this.findMax();
 
-        for (int i = valuesZ.indexOf(max) ; i < valuesZ.size() ; i++) {
+        for (int i = valuesZ.indexOf(max) ; i < valuesZ.size() && i != -1 ; i++) {
             graph.addValueZ(valuesZ.get(i));
         }
 
@@ -111,6 +112,19 @@ public class XYGraph {
         Integer max = this.findMax();
 
         for (int i = 0 ; i < valuesZ.indexOf(max); i++) {
+            graph.addValueZ(valuesZ.get(i));
+        }
+
+        return graph;
+    }
+
+    public XYGraph snipGraph(double percent) {
+        XYGraph graph = new XYGraph(row);
+        Double range = downGraph().getSize() > upGraph().getSize() ? Double.valueOf(upGraph().getSize()) : Double.valueOf(downGraph().getSize());
+        range = (range / 100) * percent;
+        Integer midPoint = valuesZ.indexOf(findMax());
+
+        for (int i = midPoint - (range.intValue()) ; i < midPoint + range ; i++ ) {
             graph.addValueZ(valuesZ.get(i));
         }
 

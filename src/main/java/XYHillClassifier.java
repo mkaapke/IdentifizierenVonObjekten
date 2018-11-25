@@ -31,13 +31,7 @@ public class XYHillClassifier {
 
     public Integer isAObject(XYHill hill) {
 
-        List<Double> left = hill.getxValues().gradients();
-        List<Double> right = hill.getyValues().gradients();
-
-        boolean print = false;
-
-        //System.out.println(hill + "\n");
-        return flatness(hill) ? 1 : 0;
+        return flatness(hill) ? 0 : 1;
     }
 
     public boolean flatness(XYHill hill) {
@@ -49,9 +43,37 @@ public class XYHillClassifier {
 
         for (Double d : hill.getyValues().gradients()) if (d < attributeFlatnessDef &&  d > -attributeFlatnessDef) flatness++;
 
-        System.out.println((100 / (hill.getxValues().gradients().size() + hill.getyValues().gradients().size())) * flatness);
+        //System.out.println((100 / (hill.getxValues().gradients().size() + hill.getyValues().gradients().size())) * flatness);
 
-        return triggerFlatness > (100 / (hill.getxValues().gradients().size() + hill.getyValues().gradients().size())) * flatness ;
+        return ((100 / (hill.getxValues().gradients().size() + hill.getyValues().gradients().size())) * flatness) > 50 ;
+    }
+
+    public boolean evenlyRise(XYHill hill) {
+        List<Double> left = hill.getxValues().snipGraph(50).upGraph().gradients();
+        List<Double> right = hill.getxValues().snipGraph(50).downGraph().gradients();
+        double leftdss = 0;
+        double rightdss = 0;
+        boolean hitX = false;
+        boolean hitY = false;
+
+
+        for (Double d : left) { leftdss += d; }
+        for (Double d : right) { rightdss += d; }
+        if (((100 / (leftdss / left.size()) * (rightdss / -right.size())) - 100) < 100 && ((100 / (leftdss / left.size()) * (rightdss / -right.size())) - 100) > -100)
+            hitX = true;
+
+        left = hill.getyValues().snipGraph(50).upGraph().gradients();
+        right = hill.getyValues().snipGraph(50).downGraph().gradients();
+        leftdss = 0;
+        rightdss = 0;
+
+        for (Double d : left) { leftdss += d; }
+        for (Double d : right) { rightdss += d; }
+        if (((100 / (leftdss / left.size()) * (rightdss / -right.size())) - 100) < 100 && ((100 / (leftdss / left.size()) * (rightdss / -right.size())) - 100) > -100)
+            hitY = true;
+
+        return  hitX && hitY;
+
     }
 
     public boolean toSharp(XYHill hill) {
