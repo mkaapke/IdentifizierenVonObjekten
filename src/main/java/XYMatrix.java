@@ -2,7 +2,7 @@ import java.util.*;
 
 public class XYMatrix {
 
-    private static int range = 20;
+    private static int range = 10;
 
     private Map<Integer, List<Integer>> values = new HashMap();
     private XYMatrix rotated = null;

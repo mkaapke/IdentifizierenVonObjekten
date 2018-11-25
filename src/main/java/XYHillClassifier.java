@@ -31,6 +31,31 @@ public class XYHillClassifier {
 
     public Integer isAObject(XYHill hill) {
 
+        /*Integer range = hill.getxValues().rangeGraphFromTop(10).upGraph().getSize() > hill.getxValues().rangeGraphFromTop(10).downGraph().getSize() ? hill.getxValues().rangeGraphFromTop(10).downGraph().getSize() : hill.getxValues().rangeGraphFromTop(10).upGraph().getSize();
+        List<Integer> left = hill.getxValues().rangeGraphFromTop(10).upGraph().getValuesZ();
+        Collections.reverse(left);
+        List<Integer> right = hill.getxValues().rangeGraphFromTop(10).downGraph().getValuesZ();
+
+        int wert = 0;
+
+        System.out.println(left);
+        System.out.println(right);
+
+        for (int i = 0 ;  i < range ; i++) {
+            double prozent = left.get(i).doubleValue() / right.get(i).doubleValue();
+            if (prozent > -0.99 && prozent < 1.1) wert++;
+            System.out.println(prozent);
+        }*/
+
+        /*for (Double d : hill.getxValues().gradients()) {
+            if (d > 5 || d < -5) return 0;
+        }
+
+        for (Double d : hill.getyValues().gradients()) {
+            if (d > 5 || d < -5) return 0;
+        }*/
+
+
         return flatness(hill) ? 0 : 1;
     }
 
@@ -49,8 +74,8 @@ public class XYHillClassifier {
     }
 
     public boolean evenlyRise(XYHill hill) {
-        List<Double> left = hill.getxValues().snipGraph(50).upGraph().gradients();
-        List<Double> right = hill.getxValues().snipGraph(50).downGraph().gradients();
+        List<Double> left = hill.getxValues().snipGraphFromTop(50).upGraph().gradients();
+        List<Double> right = hill.getxValues().snipGraphFromTop(50).downGraph().gradients();
         double leftdss = 0;
         double rightdss = 0;
         boolean hitX = false;
@@ -62,8 +87,8 @@ public class XYHillClassifier {
         if (((100 / (leftdss / left.size()) * (rightdss / -right.size())) - 100) < 100 && ((100 / (leftdss / left.size()) * (rightdss / -right.size())) - 100) > -100)
             hitX = true;
 
-        left = hill.getyValues().snipGraph(50).upGraph().gradients();
-        right = hill.getyValues().snipGraph(50).downGraph().gradients();
+        left = hill.getyValues().snipGraphFromTop(50).upGraph().gradients();
+        right = hill.getyValues().snipGraphFromTop(50).downGraph().gradients();
         leftdss = 0;
         rightdss = 0;
 

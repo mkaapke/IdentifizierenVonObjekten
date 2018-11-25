@@ -87,14 +87,12 @@ public class XYGraph {
         return gradients;
     }
 
-    @Override
     public String toString() {
         return "XYGraph{" +
                 "row=" + row +
                 ", valuesZ=" + valuesZ +
                 "}";
     }
-
 
     public XYGraph downGraph() {
         XYGraph graph = new XYGraph(this.row);
@@ -118,7 +116,7 @@ public class XYGraph {
         return graph;
     }
 
-    public XYGraph snipGraph(double percent) {
+    public XYGraph snipGraphFromTop(double percent) {
         XYGraph graph = new XYGraph(row);
         Double range = downGraph().getSize() > upGraph().getSize() ? Double.valueOf(upGraph().getSize()) : Double.valueOf(downGraph().getSize());
         range = (range / 100) * percent;
@@ -131,8 +129,19 @@ public class XYGraph {
         return graph;
     }
 
+    public XYGraph rangeGraphFromTop(int range) {
+        XYGraph graph = new XYGraph(row);
+        if (range > upGraph().getSize() || range > downGraph().getSize()) {
+            range = upGraph().getSize() > downGraph().getSize() ? downGraph().getSize() :  upGraph().getSize();
+        }
 
-        public static double round(double value, int places) {
+        for (int i = valuesZ.indexOf(findMax()) - range + 1 ; i < valuesZ.indexOf(findMax()) + range; i++) {
+            graph.addValueZ(valuesZ.get(i));
+        }
+        return graph;
+    }
+
+    public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
         BigDecimal bd = new BigDecimal(value);

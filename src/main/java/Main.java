@@ -9,8 +9,8 @@ import java.util.*;
 
 public class Main {
 
-    final static int datasize = 4942;
-    final static int testdata = 200;
+    final static int datasize = 3000;
+    final static int testdata = 100;
 
     public static void main(String[] args) throws IOException {
 
@@ -88,6 +88,7 @@ public class Main {
         readerB0.close();
         readerData.close();
 
+        System.out.println("---------ABOJEKTE: " + a0Points.size() + "----------");
         List<XYHill> hills = xyMatrix.getHills(a0Points);
         counter = 0;
         for (XYHill h : hills) {
@@ -97,11 +98,11 @@ public class Main {
         System.out.println("----" + counter);
 
         counter = 0;
-        System.out.println("--------------------");
+        System.out.println("---------BOBJEKTE: " + b0Points.size() + "----------");
         hills = xyMatrix.getHills(b0Points);
         for (XYHill h : hills) counter+= classifier.isAObject(h);
 
-        System.out.println("----" + counter);
+        System.out.println("----" + (b0Points.size() - counter));
 
 
 
