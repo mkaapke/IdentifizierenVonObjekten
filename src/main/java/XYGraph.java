@@ -71,7 +71,7 @@ public class XYGraph {
         return valuesY.contains(value);
     }
 
-    public List<Double> gradients() {
+    public List<Double> gradientsPercent() {
         List<Double> gradients = new ArrayList<Double>();
 
         if (valuesZ.isEmpty()) return gradients;
@@ -86,6 +86,23 @@ public class XYGraph {
         }
         return gradients;
     }
+
+    public List<Integer> gradientsInt() {
+        List<Integer> gradients = new ArrayList<Integer>();
+
+        if (valuesZ.isEmpty()) return gradients;
+
+        int valueBefore = valuesZ.get(0);
+
+        for (Integer currentValue :  valuesZ) {
+            if (currentValue != valueBefore) {
+                gradients.add(valueBefore - currentValue);
+            }
+            valueBefore = currentValue;
+        }
+        return gradients;
+    }
+
 
     public String toString() {
         return "XYGraph{" +

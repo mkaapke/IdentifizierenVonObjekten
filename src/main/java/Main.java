@@ -10,7 +10,7 @@ import java.util.*;
 public class Main {
 
     final static int datasize = 1000;
-    final static int testdata = 100;
+    final static int testdata = 50;
 
     public static void main(String[] args) throws IOException {
 
@@ -19,7 +19,7 @@ public class Main {
         BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/testdataA")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/testdataB")));*/
         BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
-        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0 (2).csv")));
+        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
 
 
@@ -92,7 +92,7 @@ public class Main {
         List<XYHill> hills = xyMatrix.getHills(a0Points);
         counter = 0;
         for (XYHill h : hills) {
-            counter+= classifier.isAObject(h);
+            if (classifier.isAObject(h)) counter++;
         }
 
         System.out.println("----" + counter);
@@ -100,7 +100,9 @@ public class Main {
         counter = 0;
         System.out.println("---------BOBJEKTE: " + b0Points.size() + "----------");
         hills = xyMatrix.getHills(b0Points);
-        for (XYHill h : hills) counter+= classifier.isAObject(h);
+        for (XYHill h : hills) {
+            if (!classifier.isAObject(h)) counter++;;
+        }
 
         System.out.println("----" + (b0Points.size() - counter));
 
