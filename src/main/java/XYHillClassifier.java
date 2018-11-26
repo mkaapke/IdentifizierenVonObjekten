@@ -12,7 +12,6 @@ public class XYHillClassifier {
 
     public static final int attributeToSharpDef = 2;
 
-
     private XYMatrix xyMatrix;
 
     public boolean isBObject(XYHill hill) {

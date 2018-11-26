@@ -8,8 +8,8 @@ import java.util.*;
 
 public class Main {
 
-    final static int datasize = 4942;
-    final static int testdata = 400;
+    final static int datasize = 2000;
+    final static int testdata = 100;
 
     public static void main(String[] args) throws IOException {
 
@@ -86,7 +86,7 @@ public class Main {
         readerB0.close();
         readerData.close();
 
-        System.out.println("---------ABOJEKTE: " + a0Points.size() + "----------");
+        /* System.out.println("---------ABOJEKTE: " + a0Points.size() + "----------");
         List<XYHill> hills = xyMatrix.getHills(a0Points);
         counter = 0;
         for (XYHill h : hills) {
@@ -100,9 +100,89 @@ public class Main {
             if (classifier.sharp(h)) counter++;
             //System.out.println(h);
         }
-        System.out.println("----" + counter);
+        System.out.println("----" + counter); */
 
 
+
+
+
+
+
+        System.out.println("---------ABOJEKTE: " + a0Points.size() + "----------");
+        List<XYHill> hills = xyMatrix.getHills(a0Points);
+
+        double aListe = a0Points.size();
+
+        double flatA = anzObjektFlat(hills, classifier);
+        double symA = anzObjektSym(hills, classifier);
+        double sharpA = anzObjektSharp(hills, classifier);
+
+        System.out.println("--Flat " + anzObjektFlat(hills, classifier));
+        System.out.println("--!Sym " + anzObjektSym(hills, classifier));
+        System.out.println("--Sharp " + anzObjektSharp(hills, classifier));
+
+
+
+        System.out.println("---------BOBJEKTE: " + b0Points.size() + "----------");
+        hills = xyMatrix.getHills(b0Points);
+
+        double bListe = b0Points.size();
+
+        double flatB = anzObjektFlat(hills, classifier);
+        double symB = anzObjektSym(hills, classifier);
+        double sharpB = anzObjektSharp(hills, classifier);
+
+        System.out.println("--Flat " + anzObjektFlat(hills, classifier));
+        System.out.println("--!Sym " + anzObjektSym(hills, classifier));
+        System.out.println("--Sharp " + anzObjektSharp(hills, classifier));
+
+        System.out.println("------Bayes-----");
+
+        double pAsym = symA / aListe;
+        double pAsharp = sharpA / aListe;
+        double pAflat = flatA / aListe;
+
+        double pBsym = symB / bListe;
+        double pBsharp = sharpB / bListe;
+        double pBflat = flatB / bListe;
+
+        double q = (pAsym * pAsharp * pAflat) / (pBsym * pBsharp * pBflat);
+
+        System.out.println("b multi: " + pBsym * pBsharp * pBflat);
+
+        System.out.println("---" + q);
+
+
+    }
+
+    public static double anzObjektFlat(List<XYHill> hills, XYHillClassifier classifier) {
+        double counter = 0;
+
+        for (XYHill h : hills) {
+            if (classifier.flat(h)) counter++;
+        }
+
+        return counter;
+    }
+
+    public static double anzObjektSym(List<XYHill> hills, XYHillClassifier classifier) {
+        double counter = 0;
+
+        for (XYHill h : hills) {
+            if (!classifier.isSymetric(h)) counter++;
+        }
+
+        return counter;
+    }
+
+    public static double anzObjektSharp(List<XYHill> hills, XYHillClassifier classifier) {
+        double counter = 0;
+
+        for (XYHill h : hills) {
+            if (classifier.sharp(h)) counter++;
+        }
+
+        return counter;
     }
 
 
