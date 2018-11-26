@@ -9,7 +9,6 @@ public class XYGraph {
     private Integer row;
     private List<Integer> valuesZ = new ArrayList<Integer>();
     private List<Integer> valuesY = new ArrayList<Integer>();
-    private boolean type; //false = A, true = B
 
     public XYGraph(Integer row) {
         this.row = row;
@@ -17,26 +16,6 @@ public class XYGraph {
 
     public Integer getRow() {
         return row;
-    }
-
-    public void setRow(Integer row) {
-        this.row = row;
-    }
-
-    public List<Integer> getValuesZ() {
-        return valuesZ;
-    }
-
-    public void setValuesZ(List<Integer> valuesZ) {
-        this.valuesZ = valuesZ;
-    }
-
-    public boolean isType() {
-        return type;
-    }
-
-    public void setType(boolean type) {
-        this.type = type;
     }
 
     public void addValueZ(Integer value) {
@@ -47,24 +26,16 @@ public class XYGraph {
         valuesY.add(value);
     }
 
-    public int getSize(){
-        return valuesZ.size();
-    }
-
-    public Integer findMin() {
-        int min = Integer.MAX_VALUE;
-        for (Integer i : valuesZ) min = min < i ? min : i;
-        return min;
-    }
-
     public Integer findMax() {
         int max = Integer.MIN_VALUE;
         for (Integer i : valuesZ) max = max > i ? max : i;
         return max;
     }
 
-    public boolean containsValueZ(Integer value) {
-        return valuesZ.contains(value);
+    public Integer findMin() {
+        int min = Integer.MAX_VALUE;
+        for (Integer i : valuesZ) min = min < i ? min : i;
+        return min;
     }
 
     public boolean containsValueY(Integer value) {
@@ -103,6 +74,9 @@ public class XYGraph {
         return gradients;
     }
 
+    public List<Integer> getValuesZ() {
+        return valuesZ;
+    }
 
     public String toString() {
         return "XYGraph{" +
@@ -130,31 +104,6 @@ public class XYGraph {
             graph.addValueZ(valuesZ.get(i));
         }
 
-        return graph;
-    }
-
-    public XYGraph snipGraphFromTop(double percent) {
-        XYGraph graph = new XYGraph(row);
-        Double range = downGraph().getSize() > upGraph().getSize() ? Double.valueOf(upGraph().getSize()) : Double.valueOf(downGraph().getSize());
-        range = (range / 100) * percent;
-        Integer midPoint = valuesZ.indexOf(findMax());
-
-        for (int i = midPoint - (range.intValue()) ; i < midPoint + range ; i++ ) {
-            graph.addValueZ(valuesZ.get(i));
-        }
-
-        return graph;
-    }
-
-    public XYGraph rangeGraphFromTop(int range) {
-        XYGraph graph = new XYGraph(row);
-        if (range > upGraph().getSize() || range > downGraph().getSize()) {
-            range = upGraph().getSize() > downGraph().getSize() ? downGraph().getSize() :  upGraph().getSize();
-        }
-
-        for (int i = valuesZ.indexOf(findMax()) - range + 1 ; i < valuesZ.indexOf(findMax()) + range; i++) {
-            graph.addValueZ(valuesZ.get(i));
-        }
         return graph;
     }
 

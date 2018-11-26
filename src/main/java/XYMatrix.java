@@ -30,16 +30,6 @@ public class XYMatrix {
         return values.containsKey(x) ? values.get(x).size() > y : false;
     }
 
-    public boolean remove(int x, int y) {
-        if (values.containsKey(x)) {
-            if (values.get(x).size() > y) {
-                values.get(x).remove(y);
-                return true;
-            }
-        }
-        return false;
-    }
-
     public Set<Map.Entry<Integer, List<Integer>>> entrySet() {
         return values.entrySet();
     }
@@ -118,56 +108,6 @@ public class XYMatrix {
         return new XYHill(findGraphInRow(x,y), rotate().findGraphInRow(y,x), x, y );
     }
 
-    //UNUSED
-    public List<XYGraph> findXGraphs() {
-        List<XYGraph> XYGraphs = new ArrayList<XYGraph>();
-        int graphNumber = -1;
-
-        for (Map.Entry<Integer, List<Integer>> entry : entrySet()) {
-            Integer currentValue = entry.getValue().get(0);
-            int gradiantState = -1;
-            Integer yTrack = 1;
-            for (Integer nextValue : entry.getValue()) {
-                if (nextValue > currentValue && gradiantState != 0) {
-                    gradiantState = 2;
-                }
-                if (nextValue < currentValue && gradiantState != 1) {
-                    gradiantState = 1;
-                }
-
-                if (gradiantState == 0) {
-                    XYGraphs.get(graphNumber).addValueZ(nextValue);
-                    XYGraphs.get(graphNumber).addValueY(yTrack++);
-                }
-
-                if (gradiantState == 1) {
-                    XYGraphs.get(graphNumber).addValueZ(nextValue);
-                    XYGraphs.get(graphNumber).addValueY(yTrack++);
-                }
-
-                if (gradiantState == 2) {
-                    gradiantState = 0;
-                    graphNumber++;
-                    XYGraphs.add(new XYGraph(entry.getKey()));
-                    XYGraphs.get(graphNumber).addValueZ(nextValue);
-                    XYGraphs.get(graphNumber).addValueY(yTrack++);
-                }
-
-                if (gradiantState == -1) {
-                    gradiantState = entry.getValue().get(0) < entry.getValue().get(1) ? 0 : 1 ;
-                    graphNumber++;
-                    XYGraphs.add(new XYGraph(entry.getKey()));
-                    XYGraphs.get(graphNumber).addValueZ(nextValue);
-                    XYGraphs.get(graphNumber).addValueY(yTrack++);
-                }
-                currentValue = nextValue;
-
-            }
-
-        }
-        return XYGraphs;
-    }
-
     public List<XYHill> getHills(List<XYPoint> points) {
         List<XYHill> hills = new ArrayList<XYHill>();
 
@@ -196,13 +136,7 @@ public class XYMatrix {
             }
         }
         return ret;
-        /*for (Map.Entry<Integer, List<Integer>> entry : values.entrySet()) {
-            for (Integer e : entry.getValue()) {
-                ret += e + "\t";
-            }
-            ret += "\n";
-        }
-        return ret;*/
+
     }
 
 }

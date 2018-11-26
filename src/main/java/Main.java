@@ -1,6 +1,5 @@
 import com.opencsv.CSVReader;
 
-import javax.sound.midi.SysexMessage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,8 +8,8 @@ import java.util.*;
 
 public class Main {
 
-    final static int datasize = 1000;
-    final static int testdata = 50;
+    final static int datasize = 4942;
+    final static int testdata = 400;
 
     public static void main(String[] args) throws IOException {
 
@@ -52,7 +51,6 @@ public class Main {
                 counter++;
             }
             if (counter == testdata) break;
-
         }
 
         /*
@@ -92,20 +90,17 @@ public class Main {
         List<XYHill> hills = xyMatrix.getHills(a0Points);
         counter = 0;
         for (XYHill h : hills) {
-            if (classifier.isAObject(h)) counter++;
+            if (classifier.sharp(h)) counter++;
         }
-
         System.out.println("----" + counter);
-
         counter = 0;
         System.out.println("---------BOBJEKTE: " + b0Points.size() + "----------");
         hills = xyMatrix.getHills(b0Points);
         for (XYHill h : hills) {
-            if (!classifier.isAObject(h)) counter++;;
+            if (classifier.sharp(h)) counter++;
+            //System.out.println(h);
         }
-
-        System.out.println("----" + (b0Points.size() - counter));
-
+        System.out.println("----" + counter);
 
 
     }
