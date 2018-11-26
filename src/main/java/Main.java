@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Main {
 
-    final static int datasize = 3000;
+    final static int datasize = 1000;
     final static int testdata = 100;
 
     public static void main(String[] args) throws IOException {
@@ -19,7 +19,7 @@ public class Main {
         BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/testdataA")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/testdataB")));*/
         BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
-        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
+        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0 (2).csv")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
 
 

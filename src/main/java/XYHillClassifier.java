@@ -55,6 +55,7 @@ public class XYHillClassifier {
             if (d > 5 || d < -5) return 0;
         }*/
 
+        System.out.println(hill);
 
         return flatness(hill) ? 0 : 1;
     }
