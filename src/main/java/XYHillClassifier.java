@@ -21,7 +21,7 @@ public class XYHillClassifier {
     private static final double pBsharp = 0.535;
     private static final double pBflat = 0.4425;
 
-    private double pAHill;
+    private double pAHill; //Wie genau sollen wir das berechnen? 
     private double pBHill;
 
     public XYHillClassifier(double amountAHills, double amountBHills) {
