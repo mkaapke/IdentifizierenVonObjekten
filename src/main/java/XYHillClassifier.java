@@ -1,11 +1,6 @@
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-import sun.awt.Symbol;
-
-import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class XYHillClassifier {
 
@@ -16,7 +11,8 @@ public class XYHillClassifier {
     private static final double[] attributenotSymetricDef = {0,9, 1.1};
     private static final int triggerSymetricPercent = 20;
 
-    private static final int attributeToSharpDef = 3;
+    private static final int attributeSharpnessDef = 3;
+    private static final int attributeSharpnessRange = 3;
 
     private static final double pASym = 0.857;
     private static final double pAsharp = 0.3075;
@@ -59,7 +55,6 @@ public class XYHillClassifier {
             //isBHill = isFlatB  * isSymB * pBHill;
 
             if ((isAHill < isBHill)) counter++;
-
         }
 
         System.out.println(counter);
@@ -72,34 +67,30 @@ public class XYHillClassifier {
         Collections.reverse(left);
         List<Integer> right = hill.getxValues().downGraph().gradientsInt();
         Integer rangeX = left.size() > right.size() ? right.size() : left.size();
-
         double wertX = 0;
         for (int i = 1 ;  i < rangeX ; i++) {
             double prozent = (left.get(i).doubleValue()*-1) / right.get(i).doubleValue();
             if (prozent < attributenotSymetricDef[1] && prozent > attributenotSymetricDef[0]) wertX++; else wertX--;
             //if (wertX > 5) return true;
         }
-        if (wertX < 5) return false;
         double symetricProportionX = wertX > 0 ? (100 / rangeX) * wertX : 0;
-
+        if (wertX < 5) return false;
         if (symetricProportionX < triggerSymetricPercent) return false;
 
         left = hill.getyValues().upGraph().gradientsInt();
         Collections.reverse(left);
         right = hill.getyValues().downGraph().gradientsInt();
         Integer rangeY = left.size() > right.size() ? right.size() : left.size();
-        //if ((100 / rangeY) * left.size() > 20 || (100 / rangeY) * left.size() > 20) return false;
         double wertY = 0;
         for (int i = 1 ;  i < rangeY ; i++) {
             double prozent = (left.get(i).doubleValue()*-1) / right.get(i).doubleValue();
             if (prozent < attributenotSymetricDef[1] && prozent > attributenotSymetricDef[0]) wertY++; else wertY--;
-            if (wertY > 5) return true;
+            //if (wertY > 5) return true;
         }
-        if (wertY < 5) return false;
         double symetricProportionY = wertY > 0 ? (100 / rangeY) * wertY : 0;
-
-
+        if (wertY < 5) return false;
         if (symetricProportionY < triggerSymetricPercent) return false;
+
         return true;
     }
 
@@ -113,19 +104,26 @@ public class XYHillClassifier {
 
     public boolean sharp(XYHill hill) {
 
-        if (hill.getxValues().gradientsPercent().get(0) < -attributeToSharpDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-1) < -attributeToSharpDef) return true;
-        if (hill.getxValues().gradientsPercent().get(1) < -attributeToSharpDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-2) < -attributeToSharpDef) return true;
-        if (hill.getxValues().gradientsPercent().get(2) < -attributeToSharpDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-3) < -attributeToSharpDef) return true;
-        if (hill.getyValues().gradientsPercent().get(0) < -attributeToSharpDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-1) < -attributeToSharpDef) return true;
-        if (hill.getyValues().gradientsPercent().get(1) < -attributeToSharpDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-2) < -attributeToSharpDef) return true;
-        if (hill.getyValues().gradientsPercent().get(2) < -attributeToSharpDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-3) < -attributeToSharpDef) return true;
+        for (int i = 0 ; i < attributeSharpnessRange ; i++) {
+            if (hill.getxValues().gradientsPercent().get(i) < -attributeSharpnessDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-(i+1)) < -attributeSharpnessDef) return true;
+            if (hill.getyValues().gradientsPercent().get(i) < -attributeSharpnessDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-(i+1)) < -attributeSharpnessDef) return true;
+            if (hill.getxValues().gradientsPercent().get(i) > attributeSharpnessDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-(i+1)) > attributeSharpnessDef) return true;
+            if (hill.getyValues().gradientsPercent().get(i) > attributeSharpnessDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-(i+1)) > attributeSharpnessDef) return true;
+        }
 
-        if (hill.getxValues().gradientsPercent().get(0) > attributeToSharpDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-1) > attributeToSharpDef) return true;
-        if (hill.getxValues().gradientsPercent().get(1) > attributeToSharpDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-2) > attributeToSharpDef) return true;
-        if (hill.getxValues().gradientsPercent().get(2) > attributeToSharpDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-3) > attributeToSharpDef) return true;
-        if (hill.getyValues().gradientsPercent().get(0) > attributeToSharpDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-1) > attributeToSharpDef) return true;
-        if (hill.getyValues().gradientsPercent().get(1) > attributeToSharpDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-2) > attributeToSharpDef) return true;
-        if (hill.getyValues().gradientsPercent().get(2) > attributeToSharpDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-3) > attributeToSharpDef) return true;
+        /*if (hill.getxValues().gradientsPercent().get(0) < -attributeSharpnessDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-1) < -attributeSharpnessDef) return true;
+        if (hill.getxValues().gradientsPercent().get(1) < -attributeSharpnessDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-2) < -attributeSharpnessDef) return true;
+        if (hill.getxValues().gradientsPercent().get(2) < -attributeSharpnessDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-3) < -attributeSharpnessDef) return true;
+        if (hill.getyValues().gradientsPercent().get(0) < -attributeSharpnessDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-1) < -attributeSharpnessDef) return true;
+        if (hill.getyValues().gradientsPercent().get(1) < -attributeSharpnessDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-2) < -attributeSharpnessDef) return true;
+        if (hill.getyValues().gradientsPercent().get(2) < -attributeSharpnessDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-3) < -attributeSharpnessDef) return true;
+
+        if (hill.getxValues().gradientsPercent().get(0) > attributeSharpnessDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-1) > attributeSharpnessDef) return true;
+        if (hill.getxValues().gradientsPercent().get(1) > attributeSharpnessDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-2) > attributeSharpnessDef) return true;
+        if (hill.getxValues().gradientsPercent().get(2) > attributeSharpnessDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-3) > attributeSharpnessDef) return true;
+        if (hill.getyValues().gradientsPercent().get(0) > attributeSharpnessDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-1) > attributeSharpnessDef) return true;
+        if (hill.getyValues().gradientsPercent().get(1) > attributeSharpnessDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-2) > attributeSharpnessDef) return true;
+        if (hill.getyValues().gradientsPercent().get(2) > attributeSharpnessDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-3) > attributeSharpnessDef) return true;*/
 
         return false;
     }
