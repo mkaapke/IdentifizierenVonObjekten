@@ -21,6 +21,6 @@ public class XYHill {
     }
 
     public String toString() {
-        return xValues.toString() + "\nX:" + x + " \n" + yValues.toString() + "\nY:" + y;
+        return "X:" + x + xValues.toString() + " \n" + "Y:" + y + yValues.toString() ;
     }
 }

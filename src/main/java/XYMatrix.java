@@ -26,10 +26,6 @@ public class XYMatrix {
         return 0;
     }
 
-    public boolean containsXY(int x, int y) {
-        return values.containsKey(x) ? values.get(x).size() > y : false;
-    }
-
     public Set<Map.Entry<Integer, List<Integer>>> entrySet() {
         return values.entrySet();
     }

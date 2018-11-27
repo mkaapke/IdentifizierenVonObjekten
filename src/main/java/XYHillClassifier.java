@@ -1,6 +1,7 @@
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import sun.awt.Symbol;
 
+import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,23 +10,20 @@ import java.util.stream.Collectors;
 public class XYHillClassifier {
 
 
-    private static final double  attributeFlatnessDef = 0.2;
-    private static final int triggerFlatnessPercent = 40;
+    private static final double attributeFlatnessDef = 0.2;
+    private static final int triggerFlatnessPercent = 50;
 
-    //private static final double[] attributenotSymetricDef = {1.5, 0.5};
-    //private static final int triggerSymetricPercent = 10;
-
-    private static final double[] attributenotSymetricDef = {1.5, 0.5};
+    private static final double[] attributenotSymetricDef = {0,9, 1.1};
     private static final int triggerSymetricPercent = 20;
 
-    private static final int attributeToSharpDef = 5;
+    private static final int attributeToSharpDef = 3;
 
-    private static final double pASym = 0.77;
-    private static final double pAsharp = 0.405;
+    private static final double pASym = 0.857;
+    private static final double pAsharp = 0.3075;
     private static final double pAflat = 0.125;
 
-    private static final double pBSym = 0.54;
-    private static final double pBsharp = 0.65;
+    private static final double pBSym = 0.44;
+    private static final double pBsharp = 0.535;
     private static final double pBflat = 0.4425;
 
     private double pAHill = 0;
@@ -48,19 +46,20 @@ public class XYHillClassifier {
             double isAHill = 1.0;
             double isBHill = 1.0;
             double isFlatA = flat(hill) ? (pAflat * pAHill) / pAHill : 1;
-            //double isSharpA = sharp(hill) ? (pAsharp * pAHill) / pAHill : 1;
+            double isSharpA = sharp(hill) ? (pAsharp * pAHill) / pAHill : 1;
             double isSymA = isSymetric(hill) ? (pASym * pAHill) / pAHill : 1;
 
             double isFlatB = flat(hill) ? (pBflat * pBHill) / pBHill : 1;
             double isSharpB = sharp(hill) ? (pBsharp * pBHill) / pBHill : 1;
             double isSymB = isSymetric(hill) ? (pBSym * pBHill) / pBHill : 1;
 
-            //isAHill = isFlatA * isSharpA * isSymA * pAHill;
-            isAHill = isFlatA * isSymA * pAHill;
-            //isBHill = isFlatB * isSharpB * isSymB * pBHill;
-            isBHill = isFlatB * isSymB * pBHill;
+            isAHill = isFlatA * isSharpA * isSymA * pAHill;
+            //isAHill = isFlatA  * isSymA * pAHill;
+            isBHill = isFlatB * isSharpB * isSymB * pBHill;
+            //isBHill = isFlatB  * isSymB * pBHill;
 
             if ((isAHill < isBHill)) counter++;
+
         }
 
         System.out.println(counter);
@@ -73,12 +72,14 @@ public class XYHillClassifier {
         Collections.reverse(left);
         List<Integer> right = hill.getxValues().downGraph().gradientsInt();
         Integer rangeX = left.size() > right.size() ? right.size() : left.size();
-        //if ((100 / rangeX) * left.size() > 20|| (100 / rangeX) * left.size() > 20) return false;
+
         double wertX = 0;
         for (int i = 1 ;  i < rangeX ; i++) {
             double prozent = (left.get(i).doubleValue()*-1) / right.get(i).doubleValue();
-            if (prozent < attributenotSymetricDef[0] && prozent > attributenotSymetricDef[1]) wertX++;
+            if (prozent < attributenotSymetricDef[1] && prozent > attributenotSymetricDef[0]) wertX++; else wertX--;
+            //if (wertX > 5) return true;
         }
+        if (wertX < 5) return false;
         double symetricProportionX = wertX > 0 ? (100 / rangeX) * wertX : 0;
 
         if (symetricProportionX < triggerSymetricPercent) return false;
@@ -91,14 +92,17 @@ public class XYHillClassifier {
         double wertY = 0;
         for (int i = 1 ;  i < rangeY ; i++) {
             double prozent = (left.get(i).doubleValue()*-1) / right.get(i).doubleValue();
-            if (prozent < attributenotSymetricDef[0] && prozent > attributenotSymetricDef[1]) wertY++;
+            if (prozent < attributenotSymetricDef[1] && prozent > attributenotSymetricDef[0]) wertY++; else wertY--;
+            if (wertY > 5) return true;
         }
+        if (wertY < 5) return false;
         double symetricProportionY = wertY > 0 ? (100 / rangeY) * wertY : 0;
+
 
         if (symetricProportionY < triggerSymetricPercent) return false;
         return true;
-        //return symetricProportionX > triggerSymetricPercent && symetricProportionY > triggerSymetricPercent;
     }
+
 
     public boolean flat(XYHill hill) {
         Integer flatness = 0;

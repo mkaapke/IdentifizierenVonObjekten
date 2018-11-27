@@ -8,38 +8,19 @@ public class XYGraph {
 
     private Integer row;
     private List<Integer> valuesZ = new ArrayList<Integer>();
-    private List<Integer> valuesY = new ArrayList<Integer>();
 
     public XYGraph(Integer row) {
         this.row = row;
-    }
-
-    public Integer getRow() {
-        return row;
     }
 
     public void addValueZ(Integer value) {
         valuesZ.add(value);
     }
 
-    public void addValueY(Integer value) {
-        valuesY.add(value);
-    }
-
     public Integer findMax() {
         int max = Integer.MIN_VALUE;
         for (Integer i : valuesZ) max = max > i ? max : i;
         return max;
-    }
-
-    public Integer findMin() {
-        int min = Integer.MAX_VALUE;
-        for (Integer i : valuesZ) min = min < i ? min : i;
-        return min;
-    }
-
-    public boolean containsValueY(Integer value) {
-        return valuesY.contains(value);
     }
 
     public List<Double> gradientsPercent() {
@@ -74,9 +55,6 @@ public class XYGraph {
         return gradients;
     }
 
-    public List<Integer> getValuesZ() {
-        return valuesZ;
-    }
 
     public String toString() {
         return "XYGraph{" +
