@@ -23,7 +23,7 @@ public class XYHillClassifier {
 
     private double pAHill;
     private double pBHill;
-    
+
     public XYHillClassifier(double amountAHills, double amountBHills) {
         this.pAHill = amountAHills / (amountAHills + amountBHills);
         this.pBHill = amountBHills / (amountAHills + amountBHills);;
