@@ -1,0 +1,16 @@
+ private static final double attributeFlatnessDef = 0.2;
+    private static final int triggerFlatnessPercent = 50;
+
+    private static final double[] attributenotSymetricDef = {0,9, 1.1};
+    private static final int triggerSymetricPercent = 20;
+
+    private static final int attributeSharpnessDef = 3;
+    private static final int attributeSharpnessRange = 3;
+
+    private static final double pASym = 0.857;
+    private static final double pAsharp = 0.3075;
+    private static final double pAflat = 0.125;
+
+    private static final double pBSym = 0.44;
+    private static final double pBsharp = 0.535;
+    private static final double pBflat = 0.4425;

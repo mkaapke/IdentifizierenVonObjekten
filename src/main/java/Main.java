@@ -74,58 +74,11 @@ public class Main {
 
         classifier = new XYHillClassifier(a0Points.size(), b0Points.size());
 
-        System.out.println("---------ABOJEKTE: " + a0Points.size() + "----------");
-        List<XYHill> hills = xyMatrix.getHills(a0Points);
+        classifier.training(xyMatrix.getHills(a0Points), xyMatrix.getHills(b0Points));
 
-        double aListe = a0Points.size();
-
-        double flatA = classifier.anzObjektFlat(hills);
-        double symA = classifier.anzObjektSym(hills);
-        double sharpA = classifier.anzObjektSharp(hills);
-
-        System.out.println("--Flat " + classifier.anzObjektFlat(hills));
-        System.out.println("--Sym " + classifier.anzObjektSym(hills));
-        System.out.println("--Sharp " + classifier.anzObjektSharp(hills));
-
-        System.out.println("---------BOBJEKTE: " + b0Points.size() + "----------");
-        hills = xyMatrix.getHills(b0Points);
-
-        double bListe = b0Points.size();
-
-        double flatB = classifier.anzObjektFlat(hills);
-        double symB = classifier.anzObjektSym(hills);
-        double sharpB = classifier.anzObjektSharp(hills);
-
-        System.out.println("--Flat " + classifier.anzObjektFlat(hills));
-        System.out.println("--Sym " + classifier.anzObjektSym(hills));
-        System.out.println("--Sharp " + classifier.anzObjektSharp(hills));
-
-        System.out.println("------Bayes-----");
-
-        double pAsym = symA / aListe;
-        double pAsharp = sharpA / aListe;
-        double pAflat = flatA / aListe;
-
-        double pBsym = symB / bListe;
-        double pBsharp = sharpB / bListe;
-        double pBflat = flatB / bListe;
-
-        System.out.println("-----Wahrscheinlichkeiten A -----");
-        System.out.println(("P(Sym|A) = " + pAsym));
-        System.out.println(("P(Sharp|A) = " + pAsharp));
-        System.out.println(("P(Flat|A) = " + pAflat));
-        System.out.println("-----Wahrscheinlichkeiten B -----");
-        System.out.println(("P(Sym|B) = " + pBsym));
-        System.out.println(("P(Sharp|B) = " + pBsharp));
-        System.out.println(("P(Flat|B) = " + pBflat));
-
-        double q = (pAsym * pAsharp * pAflat) / (pBsym * pBsharp * pBflat);
-
-        System.out.println("---" + q);
-
-        System.out.println(classifier.findAObjects( xyMatrix.getHills(a0Points)));
+        classifier.findBObjects( xyMatrix.getHills(a0Points));
         System.out.println("-------------------------------------");
-        System.out.println(classifier.findAObjects( xyMatrix.getHills(b0Points)));
+        classifier.findBObjects( xyMatrix.getHills(b0Points));
 
 
     }

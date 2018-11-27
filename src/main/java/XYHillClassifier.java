@@ -23,43 +23,39 @@ public class XYHillClassifier {
 
     private double pAHill;
     private double pBHill;
-    private double amountAHills;
-    private double amountBHills;
+
 
     public XYHillClassifier(double amountAHills, double amountBHills) {
-        this.amountAHills = amountAHills;
-        this.amountBHills = amountBHills;
         this.pAHill = amountAHills / (amountAHills + amountBHills);
         this.pBHill = amountBHills / (amountAHills + amountBHills);;
     }
 
-    public List<XYHill> findAObjects(List<XYHill> hills) {
-        List<XYHill> aHills = new ArrayList<XYHill>();
-        int counter = 0;
+    public List<XYHill> findBObjects(List<XYHill> hills) {
+        List<XYHill> bHills = new ArrayList<>();
 
         for (XYHill hill : hills) {
-            double isAHill = 1.0;
-            double isBHill = 1.0;
-            double isFlatA = flat(hill) ? (pAflat * pAHill) / pAHill : 1;
-            double isSharpA = sharp(hill) ? (pAsharp * pAHill) / pAHill : 1;
-            double isSymA = isSymetric(hill) ? (pASym * pAHill) / pAHill : 1;
+            double isAHill;
+            double isBHill;
+            double isFlatA = (flat(hill) ? (pAflat * pAHill) / pAHill : 0) + 0.00000001; //Dürfen wir das?
+            double isSharpA = (sharp(hill) ? (pAsharp * pAHill) / pAHill : 0) + 0.00000001;
+            double isSymA = (isSymetric(hill) ? (pASym * pAHill) / pAHill : 0) + 0.00000001;
 
-            double isFlatB = flat(hill) ? (pBflat * pBHill) / pBHill : 1;
-            double isSharpB = sharp(hill) ? (pBsharp * pBHill) / pBHill : 1;
-            double isSymB = isSymetric(hill) ? (pBSym * pBHill) / pBHill : 1;
+            double isFlatB = (flat(hill) ? (pBflat * pBHill) / pBHill : 0) + 0.00000001;
+            double isSharpB = (sharp(hill) ? (pBsharp * pBHill) / pBHill : 0) + 0.00000001 ;
+            double isSymB = (isSymetric(hill) ? (pBSym * pBHill) / pBHill : 0) + 0.00000001;
 
             isAHill = isFlatA * isSharpA * isSymA * pAHill;
             isBHill = isFlatB * isSharpB * isSymB * pBHill;
 
-            if ((isAHill < isBHill)) counter++;
+            if ((isAHill < isBHill)) bHills.add(hill);
         }
 
-        System.out.println(counter);
+        System.out.println(bHills.size());
 
-        return aHills;
+        return bHills;
     }
 
-    public boolean isSymetric(XYHill hill) {
+    private boolean isSymetric(XYHill hill) {
         List<Integer> left = hill.getxValues().upGraph().gradientsInt();
         Collections.reverse(left);
         List<Integer> right = hill.getxValues().downGraph().gradientsInt();
@@ -89,15 +85,14 @@ public class XYHillClassifier {
         return true;
     }
 
-
-    public boolean flat(XYHill hill) {
+    private boolean flat(XYHill hill) {
         Integer flatness = 0;
         for (Double d : hill.getxValues().gradientsPercent()) if (d < attributeFlatnessDef &&  d > -attributeFlatnessDef) flatness++;
         for (Double d : hill.getyValues().gradientsPercent()) if (d < attributeFlatnessDef &&  d > -attributeFlatnessDef) flatness++;
         return ((100 / (hill.getxValues().gradientsPercent().size() + hill.getyValues().gradientsPercent().size())) * flatness) > triggerFlatnessPercent ;
     }
 
-    public boolean sharp(XYHill hill) {
+    private boolean sharp(XYHill hill) {
 
         for (int i = 0 ; i < attributeSharpnessRange ; i++) {
             if (hill.getxValues().gradientsPercent().get(i) < -attributeSharpnessDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-(i+1)) < -attributeSharpnessDef) return true;
@@ -109,7 +104,7 @@ public class XYHillClassifier {
         return false;
     }
 
-    public double anzObjektFlat(List<XYHill> hills) {
+    private double anzObjektFlat(List<XYHill> hills) {
         double counter = 0;
         for (XYHill h : hills) {
             if (this.flat(h)) counter++;
@@ -117,7 +112,7 @@ public class XYHillClassifier {
         return counter;
     }
 
-    public double anzObjektSym(List<XYHill> hills) {
+    private double anzObjektSym(List<XYHill> hills) {
         double counter = 0;
         for (XYHill h : hills) {
             if (this.isSymetric(h)) counter++;
@@ -125,12 +120,63 @@ public class XYHillClassifier {
         return counter;
     }
 
-    public double anzObjektSharp(List<XYHill> hills) {
+    private double anzObjektSharp(List<XYHill> hills) {
         double counter = 0;
         for (XYHill h : hills) {
             if (this.sharp(h)) counter++;
         }
         return counter;
+    }
+
+    public void training(List<XYHill> aHills, List<XYHill> bHills) {
+        System.out.println("---------ABOJEKTE: " + aHills.size() + "----------");
+        List<XYHill> hills = aHills;
+
+        double aListe = aHills.size();
+
+        double flatA = anzObjektFlat(hills);
+        double symA = anzObjektSym(hills);
+        double sharpA = anzObjektSharp(hills);
+
+        System.out.println("--Flat " + anzObjektFlat(hills));
+        System.out.println("--Sym " + anzObjektSym(hills));
+        System.out.println("--Sharp " + anzObjektSharp(hills));
+
+        System.out.println("---------BOBJEKTE: " + bHills.size() + "----------");
+        hills = bHills;
+
+        double bListe = aHills.size();
+
+        double flatB = anzObjektFlat(hills);
+        double symB = anzObjektSym(hills);
+        double sharpB = anzObjektSharp(hills);
+
+        System.out.println("--Flat " + anzObjektFlat(hills));
+        System.out.println("--Sym " + anzObjektSym(hills));
+        System.out.println("--Sharp " + anzObjektSharp(hills));
+
+        System.out.println("------Bayes-----");
+
+        double pAsym = symA / aListe;
+        double pAsharp = sharpA / aListe;
+        double pAflat = flatA / aListe;
+
+        double pBsym = symB / bListe;
+        double pBsharp = sharpB / bListe;
+        double pBflat = flatB / bListe;
+
+        System.out.println("-----Wahrscheinlichkeiten A -----");
+        System.out.println(("P(Sym|A) = " + pAsym));
+        System.out.println(("P(Sharp|A) = " + pAsharp));
+        System.out.println(("P(Flat|A) = " + pAflat));
+        System.out.println("-----Wahrscheinlichkeiten B -----");
+        System.out.println(("P(Sym|B) = " + pBsym));
+        System.out.println(("P(Sharp|B) = " + pBsharp));
+        System.out.println(("P(Flat|B) = " + pBflat));
+
+        double q = (pAsym * pAsharp * pAflat) / (pBsym * pBsharp * pBflat);
+
+        System.out.println("---" + q);
     }
 
 }
