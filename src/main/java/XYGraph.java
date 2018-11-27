@@ -55,7 +55,6 @@ public class XYGraph {
         return gradients;
     }
 
-
     public String toString() {
         return "XYGraph{" +
                 "row=" + row +

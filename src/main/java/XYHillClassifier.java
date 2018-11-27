@@ -23,8 +23,7 @@ public class XYHillClassifier {
 
     private double pAHill;
     private double pBHill;
-
-
+    
     public XYHillClassifier(double amountAHills, double amountBHills) {
         this.pAHill = amountAHills / (amountAHills + amountBHills);
         this.pBHill = amountBHills / (amountAHills + amountBHills);;
@@ -36,16 +35,19 @@ public class XYHillClassifier {
         for (XYHill hill : hills) {
             double isAHill;
             double isBHill;
-            double isFlatA = (flat(hill) ? (pAflat * pAHill) / pAHill : 0) + 0.00000001; //Dürfen wir das?
-            double isSharpA = (sharp(hill) ? (pAsharp * pAHill) / pAHill : 0) + 0.00000001;
+            double isFlatA = (isFlat(hill) ? (pAflat * pAHill) / pAHill : 0) + 0.00000001; //Dürfen wir das?
+            double isSharpA = (isSharp(hill) ? (pAsharp * pAHill) / pAHill : 0) + 0.00000001;
             double isSymA = (isSymetric(hill) ? (pASym * pAHill) / pAHill : 0) + 0.00000001;
 
-            double isFlatB = (flat(hill) ? (pBflat * pBHill) / pBHill : 0) + 0.00000001;
-            double isSharpB = (sharp(hill) ? (pBsharp * pBHill) / pBHill : 0) + 0.00000001 ;
+            double isFlatB = (isFlat(hill) ? (pBflat * pBHill) / pBHill : 0) + 0.00000001;
+            double isSharpB = (isSharp(hill) ? (pBsharp * pBHill) / pBHill : 0) + 0.00000001 ;
             double isSymB = (isSymetric(hill) ? (pBSym * pBHill) / pBHill : 0) + 0.00000001;
 
             isAHill = isFlatA * isSharpA * isSymA * pAHill;
             isBHill = isFlatB * isSharpB * isSymB * pBHill;
+
+            //Was passiert, wenn die Wahrscheinlichkeiten gleich sind?
+            if (isAHill == isBHill) System.out.println(hill);
 
             if ((isAHill < isBHill)) bHills.add(hill);
         }
@@ -85,14 +87,14 @@ public class XYHillClassifier {
         return true;
     }
 
-    private boolean flat(XYHill hill) {
+    private boolean isFlat(XYHill hill) {
         Integer flatness = 0;
         for (Double d : hill.getxValues().gradientsPercent()) if (d < attributeFlatnessDef &&  d > -attributeFlatnessDef) flatness++;
         for (Double d : hill.getyValues().gradientsPercent()) if (d < attributeFlatnessDef &&  d > -attributeFlatnessDef) flatness++;
         return ((100 / (hill.getxValues().gradientsPercent().size() + hill.getyValues().gradientsPercent().size())) * flatness) > triggerFlatnessPercent ;
     }
 
-    private boolean sharp(XYHill hill) {
+    private boolean isSharp(XYHill hill) {
 
         for (int i = 0 ; i < attributeSharpnessRange ; i++) {
             if (hill.getxValues().gradientsPercent().get(i) < -attributeSharpnessDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-(i+1)) < -attributeSharpnessDef) return true;
@@ -107,7 +109,7 @@ public class XYHillClassifier {
     private double anzObjektFlat(List<XYHill> hills) {
         double counter = 0;
         for (XYHill h : hills) {
-            if (this.flat(h)) counter++;
+            if (this.isFlat(h)) counter++;
         }
         return counter;
     }
@@ -123,7 +125,7 @@ public class XYHillClassifier {
     private double anzObjektSharp(List<XYHill> hills) {
         double counter = 0;
         for (XYHill h : hills) {
-            if (this.sharp(h)) counter++;
+            if (this.isSharp(h)) counter++;
         }
         return counter;
     }

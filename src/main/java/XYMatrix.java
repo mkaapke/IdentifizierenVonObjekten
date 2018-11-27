@@ -2,7 +2,7 @@ import java.util.*;
 
 public class XYMatrix {
 
-    private static int range = 10;
+    private static int searchRange = 10;
 
     private Map<Integer, List<Integer>> values = new HashMap();
     private XYMatrix rotated = null;
@@ -24,10 +24,6 @@ public class XYMatrix {
             }
         }
         return 0;
-    }
-
-    public Set<Map.Entry<Integer, List<Integer>>> entrySet() {
-        return values.entrySet();
     }
 
     public XYMatrix rotate() {
@@ -108,7 +104,7 @@ public class XYMatrix {
         List<XYHill> hills = new ArrayList<XYHill>();
 
         for (XYPoint p : points) {
-            Integer[] maximumPoints = findXYMaxinRange(p.getX(), p.getY(), range);
+            Integer[] maximumPoints = findXYMaxinRange(p.getX(), p.getY(), searchRange);
             Integer x = maximumPoints[0];
             Integer y = maximumPoints[1];
             XYHill hill = findHill(x, y);
@@ -117,8 +113,6 @@ public class XYMatrix {
         return hills;
     }
 
-
-    @Override
     public String toString() {
         String ret = "";
 

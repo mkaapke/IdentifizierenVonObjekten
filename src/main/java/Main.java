@@ -22,8 +22,8 @@ public class Main {
         CSVReader readerA0 = new CSVReader(a0);
         CSVReader readerData = new CSVReader(data);
 
-        List<XYPoint> a0Points = new ArrayList<XYPoint>();
-        List<XYPoint> b0Points = new ArrayList<XYPoint>();
+        List<XYPoint> a0Points = new ArrayList<>();
+        List<XYPoint> b0Points = new ArrayList<>();
 
         XYMatrix xyMatrix = new XYMatrix();
         XYHillClassifier classifier;
