@@ -9,14 +9,14 @@ import java.util.*;
 
 public class Main {
 
-    final static int datasize = 2000;
+    final static int datasize = 4942;
     final static int testdata = 100;
 
     public static void main(String[] args) throws IOException {
 
         BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
-        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
-        BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
+        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A1.csv")));
+        BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B1.csv")));
 
         CSVReader readerB0 = new CSVReader(b0);
         CSVReader readerA0 = new CSVReader(a0);
@@ -38,13 +38,9 @@ public class Main {
         Eine Map wird mit den Daten der Datei B0.csv gefüllt
         Key: Zeilennummer  Value: String mit dem Wert der Zeile
          */
-
         while ((listeB0 = readerB0.readNext()) != null) {
-            if (Integer.valueOf(listeB0[1]) < datasize) {
-                b0Points.add(new XYPoint(Integer.valueOf(listeB0[1]), Integer.valueOf(listeB0[0])));
-                counter++;
-            }
-            if (counter == testdata) break;
+            if (Integer.valueOf(listeB0[1]) < datasize) b0Points.add(new XYPoint(Integer.valueOf(listeB0[1]), Integer.valueOf(listeB0[0])));
+            if (++counter == testdata) break;
         }
 
         /*
@@ -53,11 +49,8 @@ public class Main {
          */
         counter = 0;
         while ((listeA0 = readerA0.readNext()) != null) {
-            if (Integer.valueOf(listeA0[1]) < datasize) {
-                a0Points.add(new XYPoint(Integer.valueOf(listeA0[1]), Integer.valueOf(listeA0[0])));
-                counter++;
-            }
-            if (counter == testdata) break;
+            if (Integer.valueOf(listeA0[1]) < datasize) a0Points.add(new XYPoint(Integer.valueOf(listeA0[1]), Integer.valueOf(listeA0[0])));
+            if (++counter == testdata) break;
         }
 
         /*
@@ -79,9 +72,6 @@ public class Main {
         readerB0.close();
         readerData.close();
 
-        //aHillsAmount = a0Points.size();
-        //bHillsAmount = b0Points.size();
-
         classifier = new XYHillClassifier(a0Points.size(), b0Points.size());
 
         System.out.println("---------ABOJEKTE: " + a0Points.size() + "----------");
@@ -94,10 +84,8 @@ public class Main {
         double sharpA = classifier.anzObjektSharp(hills);
 
         System.out.println("--Flat " + classifier.anzObjektFlat(hills));
-        System.out.println("--!Sym " + classifier.anzObjektSym(hills));
+        System.out.println("--Sym " + classifier.anzObjektSym(hills));
         System.out.println("--Sharp " + classifier.anzObjektSharp(hills));
-
-
 
         System.out.println("---------BOBJEKTE: " + b0Points.size() + "----------");
         hills = xyMatrix.getHills(b0Points);
@@ -109,7 +97,7 @@ public class Main {
         double sharpB = classifier.anzObjektSharp(hills);
 
         System.out.println("--Flat " + classifier.anzObjektFlat(hills));
-        System.out.println("--!Sym " + classifier.anzObjektSym(hills));
+        System.out.println("--Sym " + classifier.anzObjektSym(hills));
         System.out.println("--Sharp " + classifier.anzObjektSharp(hills));
 
         System.out.println("------Bayes-----");
