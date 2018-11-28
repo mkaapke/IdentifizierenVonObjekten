@@ -13,7 +13,7 @@ public class XYHillClassifier {
     private static final int attributeSharpnessDef = 3;
     private static final int attributeSharpnessRange = 3;
 
-    private static final double pASym = 0.857;
+    private static final double pASym = 0.857; //Sind das auch Parameter?
     private static final double pAsharp = 0.3075;
     private static final double pAflat = 0.125;
 
