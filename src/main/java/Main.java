@@ -1,5 +1,4 @@
 import com.opencsv.CSVReader;
-import sun.awt.Symbol;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,8 +10,8 @@ import java.util.*;
 
 public class Main {
 
-    final static int datasize = 1000;
-    final static int testdata = 10;
+    final static int datasize = 4942;
+    final static int testdata = 100;
 
     public static void main(String[] args) throws IOException {
 

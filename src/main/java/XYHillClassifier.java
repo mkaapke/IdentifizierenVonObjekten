@@ -33,15 +33,23 @@ public class XYHillClassifier {
         List<XYHill> bHills = new ArrayList<>();
 
         for (XYHill hill : hills) { //Ist die erste Reihe der Matrix doppelt?
-            double isAHill;
+            double isAHill; //INFO - CSV DATEIEN NIEMALS ALS EXCEL ÖFFNEN UND WERTE RAUSKOPIEREN!
             double isBHill;
-            double isFlatA = (isFlat(hill) ? (pAflat * pAHill) / pAHill : 0) + 0.00000001; //Dürfen wir das? //Muss die Gegenwahrscheinlichkeit gewählt werden?
+            /*double isFlatA = (isFlat(hill) ? (pAflat * pAHill) / pAHill : 0) + 0.00000001; //Dürfen wir das? //Muss die Gegenwahrscheinlichkeit gewählt werden?
             double isSharpA = (isSharp(hill) ? (pAsharp * pAHill) / pAHill : 0) + 0.00000001;
             double isSymA = (isSymetric(hill) ? (pASym * pAHill) / pAHill : 0) + 0.00000001;
 
             double isFlatB = (isFlat(hill) ? (pBflat * pBHill) / pBHill : 0) + 0.00000001;
             double isSharpB = (isSharp(hill) ? (pBsharp * pBHill) / pBHill : 0) + 0.00000001 ;
-            double isSymB = (isSymetric(hill) ? (pBSym * pBHill) / pBHill : 0) + 0.00000001;
+            double isSymB = (isSymetric(hill) ? (pBSym * pBHill) / pBHill : 0) + 0.00000001; */
+
+            double isFlatA = (isFlat(hill) ? (pAflat * pAHill) / pAHill : 1-((pAflat * pAHill) / pAHill)); //Oder so?
+            double isSharpA = (isSharp(hill) ? (pAsharp * pAHill) / pAHill : 1-((pAsharp * pAHill) / pAHill));
+            double isSymA = (isSymetric(hill) ? (pASym * pAHill) / pAHill : 1-((pASym * pAHill) / pAHill));
+
+            double isFlatB = (isFlat(hill) ? (pBflat * pBHill) / pBHill : 1-((pBflat * pBHill) / pBHill));
+            double isSharpB = (isSharp(hill) ? (pBsharp * pBHill) / pBHill : 1-((pBsharp * pBHill) / pBHill));
+            double isSymB = (isSymetric(hill) ? (pBSym * pBHill) / pBHill : 1-((pBSym * pBHill) / pBHill));
 
             isAHill = isFlatA * isSharpA * isSymA * pAHill;
             isBHill = isFlatB * isSharpB * isSymB * pBHill;

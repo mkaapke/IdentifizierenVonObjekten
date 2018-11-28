@@ -53,7 +53,7 @@ public class XYMatrix {
     }
 
     public Integer[] findXYMaxinRange(Integer x, Integer y, Integer range) {
-        Integer max = snipMatrix(x, y, range).findMaxValueXY();
+        Integer max = snipMatrix(x, y, range).findMaxValue();
         for (int i = x - range; i <= x + range; i++) {
             for (int j = y - range; j < y + range + 1; j++) {
                 if (i >= 0 && (j - 1) >= 0) {
@@ -68,7 +68,7 @@ public class XYMatrix {
         return new Integer[]{0,0};
     }
 
-    public Integer findMaxValueXY() {
+    public Integer findMaxValue() {
         Integer max = -Integer.MAX_VALUE;
         for (Map.Entry<Integer, List<Integer>> entry : values.entrySet()) {
             for (Integer i : entry.getValue()) {
