@@ -10,14 +10,14 @@ import java.util.*;
 
 public class Main {
 
-    final static int datasize = 4942;
-    final static int testdata = 100;
+    final static int datasize = 3000;
+    final static int testdata = 1000;
 
     public static void main(String[] args) throws IOException {
 
         BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
-        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A1.csv")));
-        BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B1.csv")));
+        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
+        BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
 
         CSVReader readerData = new CSVReader(data);
 
@@ -41,6 +41,9 @@ public class Main {
             }
         }
         readerData.close();
+
+        System.out.println(xyMatrix.snipMatrix(100,100, 4));
+        System.out.println(xyMatrix.snipMatrix(100,100, 4).rotate());
 
         classifier = new XYHillClassifier(a0Points.size(), b0Points.size());
 

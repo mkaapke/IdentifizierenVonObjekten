@@ -1,19 +1,15 @@
+/**
+ * Stellt einen Punkt in einer XY-Matrix da.
+ */
 public class XYPoint {
 
-    private Integer x;
-    private Integer y;
+    public Integer x;
+
+    public Integer y;
 
     public XYPoint(Integer x, Integer y) {
         this.x = x;
         this.y = y;
-    }
-
-    public Integer getX() {
-        return x;
-    }
-
-    public Integer getY() {
-        return y;
     }
 
     public String toString() {

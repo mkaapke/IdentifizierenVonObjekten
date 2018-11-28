@@ -13,7 +13,7 @@ public class XYHillClassifier {
     private static final int attributeSharpnessDef = 3;
     private static final int attributeSharpnessRange = 3;
 
-    private static final double pASym = 0.857; //Sind das auch Parameter?
+    private static final double pASym = 0.857;
     private static final double pAsharp = 0.3075;
     private static final double pAflat = 0.125;
 
@@ -21,7 +21,7 @@ public class XYHillClassifier {
     private static final double pBsharp = 0.535;
     private static final double pBflat = 0.4425;
 
-    private double pAHill; //Wie genau sollen wir das berechnen?
+    private double pAHill;
     private double pBHill;
 
     public XYHillClassifier(double amountAHills, double amountBHills) {
@@ -32,10 +32,19 @@ public class XYHillClassifier {
     public List<XYHill> findBObjects(List<XYHill> hills) {
         List<XYHill> bHills = new ArrayList<>();
 
-        for (XYHill hill : hills) { //Ist die erste Reihe der Matrix doppelt?
-            double isAHill; //INFO - CSV DATEIEN NIEMALS ALS EXCEL ÖFFNEN UND WERTE RAUSKOPIEREN!
+        //FRAGEN
+        //Ist die erste Reihe der Matrix doppelt?
+        //INFO - CSV DATEIEN NIEMALS ALS EXCEL ÖFFNEN UND WERTE RAUSKOPIEREN!
+        //Wie weit kommentieren?
+        //Muss die Gegenwahrscheinlichkeit gewählt werden? oder ein kleiner Wert addiert werden, falls z.B. isFlat() == false;
+        //Was passiert, wenn die Wahrscheinlichkeiten gleich sind?
+        //Sind Wahrscheinlichkeiten auch Parameter?
+        //Wie genau sollen wir pAHill /  pBHill berechnen?
+        //Ist es schlimm, dass die Datenstrukturen problemspezifisch/aufgabenbezogen aufgebaut wurden?
+        for (XYHill hill : hills) {
+            double isAHill;
             double isBHill;
-            /*double isFlatA = (isFlat(hill) ? (pAflat * pAHill) / pAHill : 0) + 0.00000001; //Dürfen wir das? //Muss die Gegenwahrscheinlichkeit gewählt werden?
+            /*double isFlatA = (isFlat(hill) ? (pAflat * pAHill) / pAHill : 0) + 0.00000001;
             double isSharpA = (isSharp(hill) ? (pAsharp * pAHill) / pAHill : 0) + 0.00000001;
             double isSymA = (isSymetric(hill) ? (pASym * pAHill) / pAHill : 0) + 0.00000001;
 
@@ -43,7 +52,7 @@ public class XYHillClassifier {
             double isSharpB = (isSharp(hill) ? (pBsharp * pBHill) / pBHill : 0) + 0.00000001 ;
             double isSymB = (isSymetric(hill) ? (pBSym * pBHill) / pBHill : 0) + 0.00000001; */
 
-            double isFlatA = (isFlat(hill) ? (pAflat * pAHill) / pAHill : 1-((pAflat * pAHill) / pAHill)); //Oder so?
+            double isFlatA = (isFlat(hill) ? (pAflat * pAHill) / pAHill : 1-((pAflat * pAHill) / pAHill));
             double isSharpA = (isSharp(hill) ? (pAsharp * pAHill) / pAHill : 1-((pAsharp * pAHill) / pAHill));
             double isSymA = (isSymetric(hill) ? (pASym * pAHill) / pAHill : 1-((pASym * pAHill) / pAHill));
 
@@ -54,10 +63,7 @@ public class XYHillClassifier {
             isAHill = isFlatA * isSharpA * isSymA * pAHill;
             isBHill = isFlatB * isSharpB * isSymB * pBHill;
 
-            //Was passiert, wenn die Wahrscheinlichkeiten gleich sind?
-            //if (isAHill == isBHill) System.out.println(hill);
-
-            if ((isAHill < isBHill)) bHills.add(hill); //< oder <=????
+            if ((isAHill < isBHill)) bHills.add(hill);
         }
 
         System.out.println(bHills.size());
