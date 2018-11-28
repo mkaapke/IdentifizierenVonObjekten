@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 public class Main {
@@ -18,40 +20,13 @@ public class Main {
         BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A1.csv")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B1.csv")));
 
-        CSVReader readerB0 = new CSVReader(b0);
-        CSVReader readerA0 = new CSVReader(a0);
         CSVReader readerData = new CSVReader(data);
 
-        List<XYPoint> a0Points = new ArrayList<>();
-        List<XYPoint> b0Points = new ArrayList<>();
+        List<XYPoint> a0Points = getPoints(new CSVReader(a0));
+        List<XYPoint> b0Points = getPoints(new CSVReader(b0));
 
         XYMatrix xyMatrix = new XYMatrix();
         XYHillClassifier classifier;
-
-        String[] listeB0 = {};
-        String[] listeA0 = {};
-        String[] dataList = {};
-
-        int counter = 0;
-
-         /*
-        Eine Map wird mit den Daten der Datei B0.csv gefüllt
-        Key: Zeilennummer  Value: String mit dem Wert der Zeile
-         */
-        while ((listeB0 = readerB0.readNext()) != null) {
-            if (Integer.valueOf(listeB0[1]) < datasize) b0Points.add(new XYPoint(Integer.valueOf(listeB0[1]), Integer.valueOf(listeB0[0])));
-            if (++counter == testdata) break;
-        }
-
-        /*
-        Eine Map wird mit den Daten der Datei A0.csv gefüllt
-        Key: Zeilennummer  Value: String mit dem Wert der Zeile
-         */
-        counter = 0;
-        while ((listeA0 = readerA0.readNext()) != null) {
-            if (Integer.valueOf(listeA0[1]) < datasize) a0Points.add(new XYPoint(Integer.valueOf(listeA0[1]), Integer.valueOf(listeA0[0])));
-            if (++counter == testdata) break;
-        }
 
         /*
         Eine Map wird mit den erstene 50 Zeilen der data.csv Datei gefüllt
@@ -59,17 +34,13 @@ public class Main {
          */
         for (int q = 0; q < datasize; q++) {
             List<String> line = new ArrayList<String>();
-            dataList = readerData.readNext();
-
+            String [] dataList = readerData.readNext();
             for (String a : dataList) {
                 line.add(a);
                 Integer toPut = Integer.valueOf(a.replace(".", ""));
                 xyMatrix.put(q+1, toPut);
             }
         }
-
-        readerA0.close();
-        readerB0.close();
         readerData.close();
 
         classifier = new XYHillClassifier(a0Points.size(), b0Points.size());
@@ -80,7 +51,29 @@ public class Main {
         System.out.println("-------------------------------------");
         classifier.findBObjects( xyMatrix.getHills(b0Points));
 
+    }
 
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
+
+    public static List<XYPoint> getPoints(CSVReader reader) throws IOException {
+        int counter = 0;
+        List<XYPoint> points = new ArrayList<>();
+        String[] liste = {};
+        while ((liste = reader.readNext()) != null) {
+            if (Integer.valueOf(liste[1]) < datasize) {
+                points.add(new XYPoint(Integer.valueOf(liste[1]), Integer.valueOf(liste[0])));
+                if (++counter == testdata) break;
+            }
+        }
+        reader.close();
+        return points;
     }
 
 

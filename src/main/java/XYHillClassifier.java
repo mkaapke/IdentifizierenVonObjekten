@@ -21,7 +21,7 @@ public class XYHillClassifier {
     private static final double pBsharp = 0.535;
     private static final double pBflat = 0.4425;
 
-    private double pAHill; //Wie genau sollen wir das berechnen? 
+    private double pAHill; //Wie genau sollen wir das berechnen?
     private double pBHill;
 
     public XYHillClassifier(double amountAHills, double amountBHills) {
@@ -35,7 +35,7 @@ public class XYHillClassifier {
         for (XYHill hill : hills) {
             double isAHill;
             double isBHill;
-            double isFlatA = (isFlat(hill) ? (pAflat * pAHill) / pAHill : 0) + 0.00000001; //Dürfen wir das?
+            double isFlatA = (isFlat(hill) ? (pAflat * pAHill) / pAHill : 0) + 0.00000001; //Dürfen wir das? //Muss die Gegenwahrscheinlichkeit gewählt werden?
             double isSharpA = (isSharp(hill) ? (pAsharp * pAHill) / pAHill : 0) + 0.00000001;
             double isSymA = (isSymetric(hill) ? (pASym * pAHill) / pAHill : 0) + 0.00000001;
 
@@ -47,9 +47,9 @@ public class XYHillClassifier {
             isBHill = isFlatB * isSharpB * isSymB * pBHill;
 
             //Was passiert, wenn die Wahrscheinlichkeiten gleich sind?
-            if (isAHill == isBHill) System.out.println(hill);
+            //if (isAHill == isBHill) System.out.println(hill);
 
-            if ((isAHill < isBHill)) bHills.add(hill);
+            if ((isAHill > isBHill)) bHills.add(hill); //< oder <=????
         }
 
         System.out.println(bHills.size());

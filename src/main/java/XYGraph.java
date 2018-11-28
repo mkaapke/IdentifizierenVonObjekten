@@ -32,7 +32,7 @@ public class XYGraph {
 
         for (Integer currentValue :  valuesZ) {
             if (currentValue != valueBefore) {
-                gradients.add(round(((100 / Double.valueOf(valueBefore)) * currentValue) - 100.0, 2));
+                gradients.add(Main.round(((100 / Double.valueOf(valueBefore)) * currentValue) - 100.0, 2));
             }
             valueBefore = currentValue;
         }
@@ -53,13 +53,6 @@ public class XYGraph {
             valueBefore = currentValue;
         }
         return gradients;
-    }
-
-    public String toString() {
-        return "XYGraph{" +
-                "row=" + row +
-                ", valuesZ=" + valuesZ +
-                "}";
     }
 
     public XYGraph downGraph() {
@@ -84,11 +77,10 @@ public class XYGraph {
         return graph;
     }
 
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+    public String toString() {
+        return "XYGraph{" +
+                "row=" + row +
+                ", valuesZ=" + valuesZ +
+                "}";
     }
 }
