@@ -49,7 +49,7 @@ public class XYHillClassifier {
             //Was passiert, wenn die Wahrscheinlichkeiten gleich sind?
             //if (isAHill == isBHill) System.out.println(hill);
 
-            if ((isAHill > isBHill)) bHills.add(hill); //< oder <=????
+            if ((isAHill < isBHill)) bHills.add(hill); //< oder <=????
         }
 
         System.out.println(bHills.size());
