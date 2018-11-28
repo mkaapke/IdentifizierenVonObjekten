@@ -32,7 +32,7 @@ public class XYHillClassifier {
     public List<XYHill> findBObjects(List<XYHill> hills) {
         List<XYHill> bHills = new ArrayList<>();
 
-        for (XYHill hill : hills) {
+        for (XYHill hill : hills) { //Ist die erste Reihe der Matrix doppelt?
             double isAHill;
             double isBHill;
             double isFlatA = (isFlat(hill) ? (pAflat * pAHill) / pAHill : 0) + 0.00000001; //Dürfen wir das? //Muss die Gegenwahrscheinlichkeit gewählt werden?
