@@ -102,8 +102,8 @@ public class XYGraph {
     }
 
     /**
-     * Gibt den Graphen als String aus.
-     * @return - Graphen als String.
+     * Gibt den XYGraph als String aus.
+     * @return - XYGraph als String.
      */
     public String toString() {
         return "XYGraph{" +

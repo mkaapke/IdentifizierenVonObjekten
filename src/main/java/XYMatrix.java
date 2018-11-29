@@ -129,21 +129,28 @@ public class XYMatrix {
 
     /**
      * Erstellt einen XYGraph, der an Punkt x,y liegt.
-     * 
-     * @param x
-     * @param y
-     * @return
+     * An x,y liegt der Höhepunkt.
+     * Der XYGraph bezieht sich auf die x-Reihe und beginnt bei x-n, wobei gilt, das x-n-1 > x-n.
+     * Endet tut der Graph bei x+n, wobei gilt x+n+1 > x+n-
+     * @param x - die Koordinate für x
+     * @param y - die Koordinate für y
+     * @return - Der Graph, der an Punkt x,y liegt.
      */
     public XYGraph findGraphInRow(Integer x, Integer y) {
         int begin = y;
         int end = y;
         XYGraph graph = new XYGraph(y);
+        //Der Anfang des XYGraph´s wird ermittelt.
+        //Solange der linke Wert von begin kleiner ist, als begin, wird begin nach links verschoben.
         while (begin-1 > 1 && get(x,begin) > get(x, begin-1) ) {
             begin--;
         }
+        //Das Ende des XYGraph´s wird ermittelt.
+        //Solange der rechte Wert von begin größer ist, als begin, wird begin nach rechts verschoben.
         while (get(x,end) > get(x,end+1)) {
             end++;
         }
+        //Der XYGraph wird aufgebaut
         for (int i = begin ; i <= end ; i++ ) {
 
             graph.addValueY(get(x, i));
@@ -152,15 +159,29 @@ public class XYMatrix {
 
     }
 
+    /**
+     * Es wird ein XYHill erstellt von den Koordianten x, y aus.
+     * Zu beachten ist, dass für die y-Ansicht, die Matrix rotiert wird und bei dem Aufruf
+     * findGraphinRow, die Koordianten einmal getauscht werden müssen.
+     * @param x - Koordinate x
+     * @param y - Koordinate y
+     * @return - Der resultierende XYHill
+     */
     public XYHill findHill(Integer x, Integer y) {
         return new XYHill(findGraphInRow(x,y), rotate().findGraphInRow(y,x), x, y );
     }
 
+    /**
+     * Findet aus einer Liste von Koordinaten die dazugehörigen XYHills.
+     * Bevor ein XYHill erstellt wird, wird der tatsächliche Höhepunkt ermittelt.
+     * @param points - Liste mit Koordinaten, aus denen XYHills gefunden und erstellt werden sollen
+     * @return - Liste mit den resultierenden XYHills.
+     */
     public List<XYHill> getHills(List<XYPoint> points) {
         List<XYHill> hills = new ArrayList<XYHill>();
 
         for (XYPoint p : points) {
-            Integer[] maximumPoints = findXYMaxinRange(p.x, p.y, searchRange);
+            Integer[] maximumPoints = findXYMaxinRange(p.x, p.y, searchRange); //Die Koordianten des Höhepunktes finden
             Integer x = maximumPoints[0];
             Integer y = maximumPoints[1];
             XYHill hill = findHill(x, y);
@@ -169,6 +190,10 @@ public class XYMatrix {
         return hills;
     }
 
+    /**
+     * Gibt den XYHill als String aus.
+     * @return - XYHill als String.
+     */
     public String toString() {
         String ret = "";
 

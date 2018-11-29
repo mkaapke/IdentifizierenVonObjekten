@@ -1,3 +1,8 @@
+/**
+ * Der XYHill repräsentiert einen Hügel da, der aus einem x-Graphen und einen y-Graphen besteht.
+ * So ist es möglich, den Hügel von zwei Seiten aus zu betrachten.
+ * Außerdem wird der Höhepunkt als x und y Koordinate gespeichert.
+ */
 public class XYHill {
 
     private XYGraph xValues;
@@ -5,6 +10,14 @@ public class XYHill {
     private Integer x;
     private Integer y;
 
+    /**
+     * Der XYHill erwartet einen XYGraph, der die x-Ansicht darstellt und einen XYGraph für die y-Ansicht.
+     * Die x und y Koordinate ist der Höhepunkt des XYHill´s.
+     * @param xValues
+     * @param yValues
+     * @param x
+     * @param y
+     */
     public XYHill(XYGraph xValues, XYGraph yValues, Integer x, Integer y) {
         this.xValues = xValues;
         this.yValues = yValues;
@@ -20,6 +33,10 @@ public class XYHill {
         return yValues;
     }
 
+    /**
+     * Gibt den XYHill als String aus.
+     * @return - XYHill als String.
+     */
     public String toString() {
         return "X:" + x + xValues + " \n" + "Y:" + y + yValues + "\n";
     }
