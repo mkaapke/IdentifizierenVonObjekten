@@ -4,69 +4,49 @@ import java.util.List;
 
 public class XYHillClassifier {
 
-    private static final double attributeFlatnessDef = 0.2;
-    private static final int triggerFlatnessPercent = 50;
+    private static final double flatnessDef = 0.2;
+    private static final int flatnessPercent = 50;
 
-    private static final double[] attributenotSymetricDef = {0,9, 1.1};
+    private static final double[] symetricRange = {0,9, 1.1};
     private static final int triggerSymetricPercent = 20;
 
-    private static final int attributeSharpnessDef = 3;
-    private static final int attributeSharpnessRange = 3;
+    private static final int abruptRise = 3;
+    private static final int abruptRiseRange = 3;
 
-    private static final double pASym = 0.857;
-    private static final double pAsharp = 0.3075;
-    private static final double pAflat = 0.125;
+    private static double pAsym;
+    private static double pAabruptRise;
+    private static double pAflat;
 
-    private static final double pBSym = 0.44;
-    private static final double pBsharp = 0.535;
-    private static final double pBflat = 0.4425;
+    private static double pBsym;
+    private static double pBabruptRise;
+    private static double pBflat;
 
-    private double pAHill;
-    private double pBHill;
+    private boolean isTrained = false;
 
-    public XYHillClassifier(double amountAHills, double amountBHills) {
-        this.pAHill = amountAHills / (amountAHills + amountBHills);
-        this.pBHill = amountBHills / (amountAHills + amountBHills);;
-    }
 
     public List<XYHill> findBObjects(List<XYHill> hills) {
         List<XYHill> bHills = new ArrayList<>();
-
-        //FRAGEN
-        //Ist die erste Reihe der Matrix doppelt?
-        //INFO - CSV DATEIEN NIEMALS ALS EXCEL ÖFFNEN UND WERTE RAUSKOPIEREN!
-        //Wie weit kommentieren?
-        //Muss die Gegenwahrscheinlichkeit gewählt werden? oder ein kleiner Wert addiert werden, falls z.B. isFlat() == false;
-        //Was passiert, wenn die Wahrscheinlichkeiten gleich sind?
-        //Sind Wahrscheinlichkeiten auch Parameter?
-        //Wie genau sollen wir pAHill /  pBHill berechnen?
-        //Ist es schlimm, dass die Datenstrukturen problemspezifisch/aufgabenbezogen aufgebaut wurden?
+        if (!isTrained) {
+            System.out.println("Klassifikator ist nicht trainiert.");
+            return bHills;
+        }
         for (XYHill hill : hills) {
             double isAHill;
             double isBHill;
-            /*double isFlatA = (isFlat(hill) ? (pAflat * pAHill) / pAHill : 0) + 0.00000001;
-            double isSharpA = (isSharp(hill) ? (pAsharp * pAHill) / pAHill : 0) + 0.00000001;
-            double isSymA = (isSymetric(hill) ? (pASym * pAHill) / pAHill : 0) + 0.00000001;
 
-            double isFlatB = (isFlat(hill) ? (pBflat * pBHill) / pBHill : 0) + 0.00000001;
-            double isSharpB = (isSharp(hill) ? (pBsharp * pBHill) / pBHill : 0) + 0.00000001 ;
-            double isSymB = (isSymetric(hill) ? (pBSym * pBHill) / pBHill : 0) + 0.00000001; */
+            double isFlatA = (isFlat(hill) ? pAflat : 1-pAflat);
+            double isSharpA = (isSharp(hill) ? pAabruptRise : 1- pAabruptRise);
+            double isSymA = (isSymetric(hill) ? pAsym : 1- pAsym);
 
-            double isFlatA = (isFlat(hill) ? (pAflat * pAHill) / pAHill : 1-((pAflat * pAHill) / pAHill));
-            double isSharpA = (isSharp(hill) ? (pAsharp * pAHill) / pAHill : 1-((pAsharp * pAHill) / pAHill));
-            double isSymA = (isSymetric(hill) ? (pASym * pAHill) / pAHill : 1-((pASym * pAHill) / pAHill));
+            double isFlatB = (isFlat(hill) ? pBflat : 1-pBflat);
+            double isSharpB = (isSharp(hill) ? pBabruptRise : 1- pBabruptRise);
+            double isSymB = (isSymetric(hill) ? pBsym : 1- pBsym);
 
-            double isFlatB = (isFlat(hill) ? (pBflat * pBHill) / pBHill : 1-((pBflat * pBHill) / pBHill));
-            double isSharpB = (isSharp(hill) ? (pBsharp * pBHill) / pBHill : 1-((pBsharp * pBHill) / pBHill));
-            double isSymB = (isSymetric(hill) ? (pBSym * pBHill) / pBHill : 1-((pBSym * pBHill) / pBHill));
-
-            isAHill = isFlatA * isSharpA * isSymA * pAHill;
-            isBHill = isFlatB * isSharpB * isSymB * pBHill;
-
-            if ((isAHill < isBHill)) bHills.add(hill);
+            isAHill = isFlatA * isSharpA * isSymA;
+            isBHill = isFlatB * isSharpB * isSymB;
+            //Wenn die Wahrscheinlichkeiten gleich sind, was selten vor kommt, ist es ein BObjekt
+            if ((isAHill <= isBHill)) bHills.add(hill);
         }
-
-        System.out.println(bHills.size());
 
         return bHills;
     }
@@ -79,7 +59,7 @@ public class XYHillClassifier {
         double wertX = 0;
         for (int i = 1 ;  i < rangeX ; i++) {
             double prozent = (left.get(i).doubleValue()*-1) / right.get(i).doubleValue();
-            if (prozent < attributenotSymetricDef[1] && prozent > attributenotSymetricDef[0]) wertX++; else wertX--;
+            if (prozent < symetricRange[1] && prozent > symetricRange[0]) wertX++; else wertX--;
         }
         double symetricProportionX = wertX > 0 ? (100 / rangeX) * wertX : 0;
         if (wertX < 5) return false;
@@ -92,31 +72,28 @@ public class XYHillClassifier {
         double wertY = 0;
         for (int i = 1 ;  i < rangeY ; i++) {
             double prozent = (left.get(i).doubleValue()*-1) / right.get(i).doubleValue();
-            if (prozent < attributenotSymetricDef[1] && prozent > attributenotSymetricDef[0]) wertY++; else wertY--;
+            if (prozent < symetricRange[1] && prozent > symetricRange[0]) wertY++; else wertY--;
         }
         double symetricProportionY = wertY > 0 ? (100 / rangeY) * wertY : 0;
         if (wertY < 5) return false;
         if (symetricProportionY < triggerSymetricPercent) return false;
-
         return true;
     }
 
     private boolean isFlat(XYHill hill) {
         Integer flatness = 0;
-        for (Double d : hill.getxValues().gradientsPercent()) if (d < attributeFlatnessDef &&  d > -attributeFlatnessDef) flatness++;
-        for (Double d : hill.getyValues().gradientsPercent()) if (d < attributeFlatnessDef &&  d > -attributeFlatnessDef) flatness++;
-        return ((100 / (hill.getxValues().gradientsPercent().size() + hill.getyValues().gradientsPercent().size())) * flatness) > triggerFlatnessPercent ;
+        for (Double d : hill.getxValues().gradientsPercent()) if (d < flatnessDef &&  d > -flatnessDef) flatness++;
+        for (Double d : hill.getyValues().gradientsPercent()) if (d < flatnessDef &&  d > -flatnessDef) flatness++;
+        return ((100 / (hill.getxValues().gradientsPercent().size() + hill.getyValues().gradientsPercent().size())) * flatness) > flatnessPercent;
     }
 
     private boolean isSharp(XYHill hill) {
-
-        for (int i = 0 ; i < attributeSharpnessRange ; i++) {
-            if (hill.getxValues().gradientsPercent().get(i) < -attributeSharpnessDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-(i+1)) < -attributeSharpnessDef) return true;
-            if (hill.getyValues().gradientsPercent().get(i) < -attributeSharpnessDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-(i+1)) < -attributeSharpnessDef) return true;
-            if (hill.getxValues().gradientsPercent().get(i) > attributeSharpnessDef || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-(i+1)) > attributeSharpnessDef) return true;
-            if (hill.getyValues().gradientsPercent().get(i) > attributeSharpnessDef || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-(i+1)) > attributeSharpnessDef) return true;
+        for (int i = 0; i < abruptRiseRange; i++) {
+            if (hill.getxValues().gradientsPercent().get(i) < -abruptRise || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-(i+1)) < -abruptRise) return true;
+            if (hill.getyValues().gradientsPercent().get(i) < -abruptRise || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-(i+1)) < -abruptRise) return true;
+            if (hill.getxValues().gradientsPercent().get(i) > abruptRise || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-(i+1)) > abruptRise) return true;
+            if (hill.getyValues().gradientsPercent().get(i) > abruptRise || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-(i+1)) > abruptRise) return true;
         }
-
         return false;
     }
 
@@ -145,7 +122,7 @@ public class XYHillClassifier {
     }
 
     public void training(List<XYHill> aHills, List<XYHill> bHills) {
-        System.out.println("---------ABOJEKTE: " + aHills.size() + "----------");
+        System.out.println("---------AOBJEKTE: " + aHills.size() + "----------");
         List<XYHill> hills = aHills;
 
         double aListe = aHills.size();
@@ -161,7 +138,7 @@ public class XYHillClassifier {
         System.out.println("---------BOBJEKTE: " + bHills.size() + "----------");
         hills = bHills;
 
-        double bListe = aHills.size();
+        double bListe = bHills.size();
 
         double flatB = anzObjektFlat(hills);
         double symB = anzObjektSym(hills);
@@ -173,26 +150,24 @@ public class XYHillClassifier {
 
         System.out.println("------Bayes-----");
 
-        double pAsym = symA / aListe;
-        double pAsharp = sharpA / aListe;
-        double pAflat = flatA / aListe;
+        pAsym = symA / aListe;
+        pAabruptRise = sharpA / aListe;
+        pAflat = flatA / aListe;
 
-        double pBsym = symB / bListe;
-        double pBsharp = sharpB / bListe;
-        double pBflat = flatB / bListe;
+        pBsym = symB / bListe;
+        pBabruptRise = sharpB / bListe;
+        pBflat = flatB / bListe;
 
         System.out.println("-----Wahrscheinlichkeiten A -----");
         System.out.println(("P(Sym|A) = " + pAsym));
-        System.out.println(("P(Sharp|A) = " + pAsharp));
+        System.out.println(("P(Sharp|A) = " + pAabruptRise));
         System.out.println(("P(Flat|A) = " + pAflat));
         System.out.println("-----Wahrscheinlichkeiten B -----");
         System.out.println(("P(Sym|B) = " + pBsym));
-        System.out.println(("P(Sharp|B) = " + pBsharp));
+        System.out.println(("P(Sharp|B) = " + pBabruptRise));
         System.out.println(("P(Flat|B) = " + pBflat));
 
-        double q = (pAsym * pAsharp * pAflat) / (pBsym * pBsharp * pBflat);
-
-        System.out.println("---" + q);
+        isTrained = true;
     }
 
 }

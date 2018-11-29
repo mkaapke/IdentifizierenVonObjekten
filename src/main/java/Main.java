@@ -10,7 +10,7 @@ import java.util.*;
 
 public class Main {
 
-    final static int datasize = 3000;
+    final static int datasize = 4942;
     final static int testdata = 1000;
 
     public static void main(String[] args) throws IOException {
@@ -18,17 +18,21 @@ public class Main {
         BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
         BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
         BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
+        BufferedReader a1 = new BufferedReader(new FileReader(new File("src/main/A1.csv")));
+        BufferedReader b1 = new BufferedReader(new FileReader(new File("src/main/B1.csv")));
 
         CSVReader readerData = new CSVReader(data);
 
         List<XYPoint> a0Points = getPoints(new CSVReader(a0));
         List<XYPoint> b0Points = getPoints(new CSVReader(b0));
+        List<XYPoint> a1Points = getPoints(new CSVReader(a1));
+        List<XYPoint> b1Points = getPoints(new CSVReader(b1));
 
         XYMatrix xyMatrix = new XYMatrix();
         XYHillClassifier classifier;
 
         /*
-        Eine Map wird mit den erstene 50 Zeilen der data.csv Datei gefüllt
+        Eine Map wird mit der von datasize vordefinierten Anzahl von Zeilen der data.csv Datei gefüllt
         Key: Zeilennummer Value: Liste mit den Werten der Zeile
          */
         for (int q = 0; q < datasize; q++) {
@@ -42,22 +46,17 @@ public class Main {
         }
         readerData.close();
 
-        System.out.println(xyMatrix.snipMatrix(100,100, 4));
-        System.out.println(xyMatrix.snipMatrix(100,100, 4).rotate());
-
-        classifier = new XYHillClassifier(a0Points.size(), b0Points.size());
-
+        classifier = new XYHillClassifier();
         classifier.training(xyMatrix.getHills(a0Points), xyMatrix.getHills(b0Points));
-
-        classifier.findBObjects( xyMatrix.getHills(a0Points));
         System.out.println("-------------------------------------");
-        classifier.findBObjects( xyMatrix.getHills(b0Points));
-
+        Double falsePositives = (100.0 / a1Points.size()) * classifier.findBObjects(xyMatrix.getHills(a1Points)).size();
+        Double truePositives = (100.0 / b1Points.size()) * classifier.findBObjects(xyMatrix.getHills(b1Points)).size();
+        System.out.println("B-False Positives: "  + falsePositives + "%" );
+        System.out.println("B-True Positives: "  + truePositives + "%" );
     }
 
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
-
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
