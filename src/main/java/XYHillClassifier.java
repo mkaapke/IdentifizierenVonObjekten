@@ -97,17 +97,17 @@ public class XYHillClassifier {
      * @return - true, wenn symmetrisch, false wenn nicht.
      */
     private boolean isSymetric(XYHill hill) {
-        List<Integer> left = hill.getxValues().upGraph().gradientsInt(); //Die linke Seite des x-XYGraph, exklusive des Höhepunktes.
-        Collections.reverse(left); //Diese muss gedreht werden, damit die get-Methode der linken Seite den höchsten Wert liefert.
-        List<Integer> right = hill.getxValues().downGraph().gradientsInt(); //Die rechte Seite des x-XYGraph, exklusive des Höhepunktes.
+        List<Integer> left = hill.getxValues().upGraph().gradientsInt();        //Die linke Seite des x-XYGraph, exklusive des Höhepunktes.
+        Collections.reverse(left);                                              //Diese muss gedreht werden, damit die get-Methode der linken Seite den höchsten Wert liefert.
+        List<Integer> right = hill.getxValues().downGraph().gradientsInt();     //Die rechte Seite des x-XYGraph, exklusive des Höhepunktes.
         //Da left und right meistens nicht gleichlang sind, muss für die Iteration eine Grenze gewählt werden, die der kleinen Seite entspricht
         Integer rangeX = left.size() > right.size() ? right.size() : left.size();
         double wertX = 0; //Zähler für die Symmetrie
         for (int i = 0 ;  i < rangeX ; i++) {
-            double prozent = (left.get(i).doubleValue()*-1) / right.get(i).doubleValue(); //Berechnung der Abweichung von den gegenüberliegenden Punkten
-            if (prozent < symetricRange[1] && prozent > symetricRange[0]) wertX++; else wertX--; //Liegt der Wert innerhalb der symetricRange, dann wird WertX inkrementiert, ansonsten dekrementiert.
+            double prozent = (left.get(i).doubleValue()*-1) / right.get(i).doubleValue();           //Berechnung der Abweichung von den gegenüberliegenden Punkten
+            if (prozent < symetricRange[1] && prozent > symetricRange[0]) wertX++; else wertX--;    //Liegt der Wert innerhalb der symetricRange, dann wird WertX inkrementiert, ansonsten dekrementiert.
         }
-        double symetricProportionX = wertX > 0 ? (100 / rangeX) * wertX : 0; //Berechnung der Anzahl an symmetrischen Punkten an der gesamten Anzahl der Punkten in Prozent
+        double symetricProportionX = wertX > 0 ? (100 / rangeX) * wertX : 0;    //Berechnung der Anzahl an symmetrischen Punkten an der gesamten Anzahl der Punkten in Prozent
         //Wenn es weniger symmetrische Punkte gibt als triggerSemetricInt oder triggerSymetricPercent, gilt das Objekt als unsymmetrisch
         if (wertX < triggerSymetricInt || symetricProportionX < triggerSymetricPercent) return false;
 
@@ -156,6 +156,11 @@ public class XYHillClassifier {
         return false;
     }
 
+    /**
+     * Zählt die Anzahl an Objekten mit dem Attribut "Flatness" in einer vorgegebenen Liste aus Objekten.
+     * @param hills Liste mit Objekten
+     * @return Anzahl an Objekten mit dem Attribut "Flatness".
+     */
     private double anzObjektFlat(List<XYHill> hills) {
         double counter = 0;
         for (XYHill h : hills) {
@@ -164,6 +169,11 @@ public class XYHillClassifier {
         return counter;
     }
 
+    /**
+     * Zählt die Anzahl an Objekten mit dem Attribut "Symmetrie" in einer vorgegebenen Liste aus Objekten.
+     * @param hills Liste mit Objekten
+     * @return Anzahl an Objekten mit dem Attribut "Symmetrie".
+     */
     private double anzObjektSym(List<XYHill> hills) {
         double counter = 0;
         for (XYHill h : hills) {
@@ -172,6 +182,11 @@ public class XYHillClassifier {
         return counter;
     }
 
+    /**
+     * Zählt die Anzahl an Objekten mit dem Attribut "abruptRise" in einer vorgegebenen Liste aus Objekten.
+     * @param hills Liste mit Objekten
+     * @return Anzahl an Objekten mit dem Attribut "abruptRise".
+     */
     private double anzObjektSharp(List<XYHill> hills) {
         double counter = 0;
         for (XYHill h : hills) {
@@ -180,6 +195,11 @@ public class XYHillClassifier {
         return counter;
     }
 
+    /**
+     * Erstellt Trainingsdaten aus vorgegebenen Listen und setzt den Boolean "isTrained" auf true, sobald durchlaufen.
+     * @param aHills Liste mit Objekten
+     * @param bHills Liste mit Objekten
+     */
     public void training(List<XYHill> aHills, List<XYHill> bHills) {
         System.out.println("---------AOBJEKTE: " + aHills.size() + "----------");
         List<XYHill> hills = aHills;

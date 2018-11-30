@@ -13,6 +13,12 @@ public class Main {
     final static int datasize = 4942;
     final static int testdata = 1000;
 
+    /**
+     * Es werden die data.csv sowie die weiteren Listen mit den gesuchten Objekten eingelesen.
+     * Mit Hilfe von Methoden werden die B-False Positives und B-True Positives ausgegeben.
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
 
         BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
@@ -55,6 +61,12 @@ public class Main {
         System.out.println("B-True Positives: "  + truePositives + "%" );
     }
 
+    /**
+     * Rundet eine Zahl auf.
+     * @param value Zu rundende Zahl.
+     * @param places Setzt die Anzahl an Zahlen nach dem Komma fest.
+     * @return gerundeter Double-Value
+     */
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
         BigDecimal bd = new BigDecimal(value);
@@ -62,7 +74,12 @@ public class Main {
         return bd.doubleValue();
     }
 
-
+    /**
+     * Erstellt eine Liste mit x und y Punkten aus einer gegebenen CSV-Datei.
+     * @param reader ein CSVReader angwendet auf eine CSV-Datei
+     * @return Eine Liste mit x und y Punkten
+     * @throws IOException
+     */
     public static List<XYPoint> getPoints(CSVReader reader) throws IOException {
         int counter = 0;
         List<XYPoint> points = new ArrayList<>();
