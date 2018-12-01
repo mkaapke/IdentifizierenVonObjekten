@@ -10,14 +10,14 @@ import java.util.*;
 
 public class Main {
 
-    final static int datasize = 4943;
-    final static int testdata = 1000;
+    private final static int datasize = 4943;
+    private final static int testdata = 1000;
 
-    final static String dataPath = "src/main/data2.csv";
-    final static String trainingDataAPath = "src/main/A0.csv";
-    final static String trainingDataBPath = "src/main/B0.csv";
-    final static String testDataAPath = "src/main/A1.csv";
-    final static String testDataBPath = "src/main/B1.csv";
+    private final static String dataPath = "src/main/data2.csv";
+    private final static String trainingDataAPath = "src/main/A0.csv";
+    private final static String trainingDataBPath = "src/main/B0.csv";
+    private final static String testDataAPath = "src/main/A1.csv";
+    private final static String testDataBPath = "src/main/B1.csv";
 
     /**
      * Es werden die data.csv sowie die weiteren Listen mit den gesuchten Objekten eingelesen.
