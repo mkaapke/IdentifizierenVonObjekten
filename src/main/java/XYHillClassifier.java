@@ -53,16 +53,17 @@ public class XYHillClassifier {
     private boolean isTrained = false; //Der Klassifikator merkt sich, ob die Daten trainiert wurden.
 
     /**
-     * Sucht in einer Liste von XYHills nach B-Objekten. Gefundene B-Objekte werden in eine Liste gespeichert.
+     * Sucht in einer Liste von XYHills nach A oder B-Objekten. Gefundene A oder B-Objekte werden in eine Liste gespeichert.
      * @param hills - Liste mit XYHills, in der gesucht werden soll.
+     * @param objekt - setzte für A-Objekte auf true, für B-Objekte auf false.
      * @return - Die Liste mit den gefundenen B-Objekten. Sollte der Klassifikator nicht trainiert sein, wird eine
      * leere Liste zurückgegeben.
      */
-    public List<XYHill> findBObjects(List<XYHill> hills) {
-        List<XYHill> bHills = new ArrayList<>();
+    public List<XYHill> findABObjects(List<XYHill> hills, boolean objekt) {
+        List<XYHill> classifiedHills = new ArrayList<>();
         if (!isTrained) { //Wenn der Klassifikator nicht trainiert wurde, wird die leere Liste zurückgegeben.
             System.out.println("Klassifikator ist nicht trainiert.");
-            return bHills;
+            return classifiedHills;
         }
         for (XYHill hill : hills) {
             double isAHill; //Wahrscheinlichkeit für ein A-Objekt
@@ -82,9 +83,15 @@ public class XYHillClassifier {
 
             //Wenn die Wahrscheinlichkeiten gleich sind, wird es das Objekt als B-Objekt eingestuft,
             //weil es sehr unwahrscheinlich ist, dass die Wahrscheinlichkeiten gleich sind.
-            if ((isAHill <= isBHill)) bHills.add(hill);
+            
+            if (objekt) {
+                if ((isAHill > isBHill)) classifiedHills.add(hill);
+            } else {
+                if ((isAHill <= isBHill)) classifiedHills.add(hill);
+            }
+           
         }
-        return bHills;
+        return classifiedHills;
     }
 
     /**

@@ -10,22 +10,26 @@ import java.util.*;
 
 public class Main {
 
-    final static int datasize = 4942;
+    final static int datasize = 4943;
     final static int testdata = 1000;
+
+    final static String dataPath = "src/main/data2.csv";
+    final static String trainingDataAPath = "src/main/A0.csv";
+    final static String trainingDataBPath = "src/main/B0.csv";
+    final static String testDataAPath = "src/main/A1.csv";
+    final static String testDataBPath = "src/main/B1.csv";
 
     /**
      * Es werden die data.csv sowie die weiteren Listen mit den gesuchten Objekten eingelesen.
      * Mit Hilfe von Methoden werden die B-False Positives und B-True Positives ausgegeben.
-     * @param args
-     * @throws IOException
      */
     public static void main(String[] args) throws IOException {
 
-        BufferedReader data = new BufferedReader(new FileReader(new File("src/main/data.csv")));
-        BufferedReader a0 = new BufferedReader(new FileReader(new File("src/main/A0.csv")));
-        BufferedReader b0 = new BufferedReader(new FileReader(new File("src/main/B0.csv")));
-        BufferedReader a1 = new BufferedReader(new FileReader(new File("src/main/A1.csv")));
-        BufferedReader b1 = new BufferedReader(new FileReader(new File("src/main/B1.csv")));
+        BufferedReader data = new BufferedReader(new FileReader(new File(dataPath)));
+        BufferedReader a0 = new BufferedReader(new FileReader(new File(trainingDataAPath)));
+        BufferedReader b0 = new BufferedReader(new FileReader(new File(trainingDataBPath)));
+        BufferedReader a1 = new BufferedReader(new FileReader(new File(testDataAPath)));
+        BufferedReader b1 = new BufferedReader(new FileReader(new File(testDataBPath)));
 
         CSVReader readerData = new CSVReader(data);
 
@@ -55,8 +59,8 @@ public class Main {
         classifier = new XYHillClassifier();
         classifier.training(xyMatrix.getHills(a0Points), xyMatrix.getHills(b0Points));
         System.out.println("-------------------------------------");
-        Double falsePositives = (100.0 / a1Points.size()) * classifier.findBObjects(xyMatrix.getHills(a1Points)).size();
-        Double truePositives = (100.0 / b1Points.size()) * classifier.findBObjects(xyMatrix.getHills(b1Points)).size();
+        Double falsePositives = (100.0 / a1Points.size()) * classifier.findABObjects(xyMatrix.getHills(a1Points), false).size();
+        Double truePositives = (100.0 / b1Points.size()) * classifier.findABObjects(xyMatrix.getHills(b1Points), false).size();
         System.out.println("B-False Positives: "  + falsePositives + "%" );
         System.out.println("B-True Positives: "  + truePositives + "%" );
     }
