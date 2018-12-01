@@ -154,10 +154,17 @@ public class XYHillClassifier {
      * @return
      */
     private boolean hasAbruptRise(XYHill hill) {
-        for (int i = 0; i < abruptRiseRange; i++) {
+
+        Integer range = abruptRiseRange > hill.getxValues().gradientsPercent().size() ? hill.getxValues().gradientsPercent().size() : abruptRiseRange;
+        for (int i = 0; i < range; i++) {
             if (hill.getxValues().gradientsPercent().get(i) < -abruptRise || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-(i+1)) < -abruptRise) return true;
-            if (hill.getyValues().gradientsPercent().get(i) < -abruptRise || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-(i+1)) < -abruptRise) return true;
             if (hill.getxValues().gradientsPercent().get(i) > abruptRise || hill.getxValues().gradientsPercent().get(hill.getxValues().gradientsPercent().size()-(i+1)) > abruptRise) return true;
+
+        }
+
+        range = abruptRiseRange > hill.getyValues().gradientsPercent().size() ? hill.getyValues().gradientsPercent().size() : abruptRiseRange;
+        for (int i = 0; i < range ; i++) {
+            if (hill.getyValues().gradientsPercent().get(i) < -abruptRise || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-(i+1)) < -abruptRise) return true;
             if (hill.getyValues().gradientsPercent().get(i) > abruptRise || hill.getyValues().gradientsPercent().get(hill.getyValues().gradientsPercent().size()-(i+1)) > abruptRise) return true;
         }
         return false;

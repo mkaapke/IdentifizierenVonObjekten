@@ -10,7 +10,13 @@ import java.util.*;
 
 public class Main {
 
-    private final static int datasize = 4943;
+    /**
+     * Definiert, wie viele Zeilen aus der data-Datei eingelesen werden soll.
+     */
+    protected final static int datasize = 4942; //Da die erste Zeile doppelt ist in der data-Datei, nehmen wir eine Zeile weniger rein.
+    /**
+     * Definiert, wie viele Testdaten aus der A und B-Listen eingelesen werden sollen.
+     */
     private final static int testdata = 1000;
 
     private final static String dataPath = "src/main/data2.csv";
@@ -45,6 +51,7 @@ public class Main {
         Eine Map wird mit der von datasize vordefinierten Anzahl von Zeilen der data.csv Datei gefüllt
         Key: Zeilennummer Value: Liste mit den Werten der Zeile
          */
+        readerData.readNext(); //Da die erste Zeile doppelt ist in der data-Datei, überspringen wir diese hiermit.
         for (int q = 0; q < datasize; q++) {
             List<String> line = new ArrayList<String>();
             String [] dataList = readerData.readNext();

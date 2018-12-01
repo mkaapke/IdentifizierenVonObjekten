@@ -184,6 +184,7 @@ public class XYMatrix {
             Integer[] maximumPoints = findXYMaxinRange(p.x, p.y, searchRange); //Die Koordianten des Höhepunktes finden
             Integer x = maximumPoints[0];
             Integer y = maximumPoints[1];
+            System.out.println(x + "/" + y);
             XYHill hill = findHill(x, y);
             hills.add(hill);
         }
