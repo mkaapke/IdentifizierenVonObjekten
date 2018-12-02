@@ -175,7 +175,7 @@ public class XYHillClassifier {
      * @param hills Liste mit Objekten
      * @return Anzahl an Objekten mit dem Attribut "Flatness".
      */
-    private double anzObjektFlat(List<XYHill> hills) {
+    private double amountObjectFlat(List<XYHill> hills) {
         double counter = 0;
         for (XYHill h : hills) {
             if (this.isFlat(h)) counter++;
@@ -188,7 +188,7 @@ public class XYHillClassifier {
      * @param hills Liste mit Objekten
      * @return Anzahl an Objekten mit dem Attribut "Symmetrie".
      */
-    private double anzObjektSym(List<XYHill> hills) {
+    private double amountObjectSym(List<XYHill> hills) {
         double counter = 0;
         for (XYHill h : hills) {
             if (this.isSymetric(h)) counter++;
@@ -201,7 +201,7 @@ public class XYHillClassifier {
      * @param hills Liste mit Objekten
      * @return Anzahl an Objekten mit dem Attribut "abruptRise".
      */
-    private double anzObjektSharp(List<XYHill> hills) {
+    private double amountObjectSharp(List<XYHill> hills) {
         double counter = 0;
         for (XYHill h : hills) {
             if (this.hasAbruptRise(h)) counter++;
@@ -214,42 +214,48 @@ public class XYHillClassifier {
      * @param aHills Liste mit Objekten
      * @param bHills Liste mit Objekten
      */
-    public void training(List<XYHill> aHills, List<XYHill> bHills) {
+    public boolean training(List<XYHill> aHills, List<XYHill> bHills) {
+        if (aHills.size() == 0) {
+            System.out.println("Keine Daten für die A-Objekte, trainieren nicht möglich");
+            isTrained = false;
+            return false;
+        }
+
+        if (bHills.size() == 0) {
+            System.out.println("Keine Daten für die B-Objekte, trainieren nicht möglich");
+            isTrained = false;
+            return false;
+        }
+
         System.out.println("---------AOBJEKTE: " + aHills.size() + "----------");
-        List<XYHill> hills = aHills;
 
-        double aListe = aHills.size();
+        double flatA = amountObjectFlat(aHills);
+        double symA = amountObjectSym(aHills);
+        double sharpA = amountObjectSharp(aHills);
 
-        double flatA = anzObjektFlat(hills);
-        double symA = anzObjektSym(hills);
-        double sharpA = anzObjektSharp(hills);
-
-        System.out.println("--Flat " + anzObjektFlat(hills));
-        System.out.println("--Sym " + anzObjektSym(hills));
-        System.out.println("--Sharp " + anzObjektSharp(hills));
+        System.out.println("--Flat " + amountObjectFlat(aHills));
+        System.out.println("--Sym " + amountObjectSym(aHills));
+        System.out.println("--Sharp " + amountObjectSharp(aHills));
 
         System.out.println("---------BOBJEKTE: " + bHills.size() + "----------");
-        hills = bHills;
 
-        double bListe = bHills.size();
+        double flatB = amountObjectFlat(bHills);
+        double symB = amountObjectSym(bHills);
+        double sharpB = amountObjectSharp(bHills);
 
-        double flatB = anzObjektFlat(hills);
-        double symB = anzObjektSym(hills);
-        double sharpB = anzObjektSharp(hills);
-
-        System.out.println("--Flat " + anzObjektFlat(hills));
-        System.out.println("--Sym " + anzObjektSym(hills));
-        System.out.println("--Sharp " + anzObjektSharp(hills));
+        System.out.println("--Flat " + amountObjectFlat(bHills));
+        System.out.println("--Sym " + amountObjectSym(bHills));
+        System.out.println("--Sharp " + amountObjectSharp(bHills));
 
         System.out.println("------Bayes-----");
 
-        pAsym = symA / aListe;
-        pAabruptRise = sharpA / aListe;
-        pAflat = flatA / aListe;
+        pAsym = amountObjectSym(aHills) /  aHills.size();
+        pAabruptRise = amountObjectSharp(aHills) /  aHills.size();
+        pAflat =   amountObjectFlat(aHills) /  aHills.size();
 
-        pBsym = symB / bListe;
-        pBabruptRise = sharpB / bListe;
-        pBflat = flatB / bListe;
+        pBsym = amountObjectSym(bHills) /  bHills.size();
+        pBabruptRise = amountObjectSharp(bHills) /  bHills.size();
+        pBflat =  amountObjectFlat(bHills) /  bHills.size();
 
         System.out.println("-----Wahrscheinlichkeiten A -----");
         System.out.println(("P(Sym|A) = " + pAsym));
@@ -261,6 +267,7 @@ public class XYHillClassifier {
         System.out.println(("P(Flat|B) = " + pBflat));
 
         isTrained = true;
+        return true;
     }
 
 }

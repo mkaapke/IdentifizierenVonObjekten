@@ -17,10 +17,10 @@ public class XYMatrix {
      */
     private Map<Integer, List<Integer>> values = new HashMap();
     /**
-     * Da das Aufbauen einer großen Matrix lange dauert und das rotieren ebenfalls, wird die rotierte Matrix,
-     * sie einmal rotiert wurde, abgespeichert.
+     * Da das Aufbauen einer großen Matrix lange dauert und das transportieren ebenfalls, wird die transportierte Matrix,
+     * wenn sie einmal transportiert wurde, abgespeichert.
      */
-    private XYMatrix rotated = null;
+    private XYMatrix transposed = null;
 
     /**
      * Zum einfügen von einem x, y Punkt und dem z-Wert.
@@ -54,18 +54,18 @@ public class XYMatrix {
     }
 
     /**
-     * Rotiert die Matrix.
-     * @return - die rotierte Matrix.
+     * Transportiert die Matrix.
+     * @return - die transportierte Matrix.
      */
-    public XYMatrix rotate() {
-        if (rotated != null) return rotated; //Falls bereits rotiert wurde, gebe die gespeicherte rotierte Matrix zurück
+    public XYMatrix transpose() {
+        if (transposed != null) return transposed; //Falls bereits transportiert wurde, gebe die gespeicherte transportierte Matrix zurück
         XYMatrix xyMatrix = new XYMatrix();
         for (int i = 0; i < values.get(1).size(); i++) {
             for (int y = 1; y <= values.size(); y++) {
                 xyMatrix.put(i+1, values.get(y).get(i));
             }
         }
-        rotated = xyMatrix;
+        transposed = xyMatrix;
         return xyMatrix;
     }
 
@@ -161,14 +161,14 @@ public class XYMatrix {
 
     /**
      * Es wird ein XYHill erstellt von den Koordianten x, y aus.
-     * Zu beachten ist, dass für die y-Ansicht, die Matrix rotiert wird und bei dem Aufruf
+     * Zu beachten ist, dass für die y-Ansicht, die Matrix transportiert wird und bei dem Aufruf
      * findGraphinRow, die Koordianten einmal getauscht werden müssen.
      * @param x - Koordinate x
      * @param y - Koordinate y
      * @return - Der resultierende XYHill
      */
     public XYHill findHill(Integer x, Integer y) {
-        return new XYHill(findGraphInRow(x,y), rotate().findGraphInRow(y,x), x, y );
+        return new XYHill(findGraphInRow(x,y), transpose().findGraphInRow(y,x), x, y );
     }
 
     /**
@@ -184,7 +184,6 @@ public class XYMatrix {
             Integer[] maximumPoints = findXYMaxinRange(p.x, p.y, searchRange); //Die Koordianten des Höhepunktes finden
             Integer x = maximumPoints[0];
             Integer y = maximumPoints[1];
-            System.out.println(x + "/" + y);
             XYHill hill = findHill(x, y);
             hills.add(hill);
         }

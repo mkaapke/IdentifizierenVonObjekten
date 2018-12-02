@@ -14,7 +14,7 @@ public class XYGraph {
     }
 
     /**
-     * Wird verwendet, um einen Y-Wert in den Graph einzufügen
+     * Wird verwendet, um einen Y-Wert in den XYGraph einzufügen
      * @param value - der einzufügende Wert
      */
     public void addValueY(Integer value) {
@@ -22,8 +22,8 @@ public class XYGraph {
     }
 
     /**
-     * Sucht den maximalen Wert im Graphen.
-     * @return - maximalen Wert im Graphen
+     * Sucht den maximalen Wert im XYGraph.
+     * @return - maximalen Wert im XYGraph.
      */
     public Integer findMax() {
         int max = Integer.MIN_VALUE;
@@ -33,6 +33,7 @@ public class XYGraph {
 
     /**
      * Berechnet die Veränderungen in Prozent von einem Punkt zum nächsten Punkt und erstellt daraus eine Liste.
+     * Beispiel: Input: (1, 2, 3, 4, 5) Output: (1.0, 0.5, 0.33, 0.25)
      * @return - Eine Liste mit der Veränderung in Prozent von Punkt x zu Punkt x + 1
      */
     public List<Double> gradientsPercent() {
@@ -53,6 +54,7 @@ public class XYGraph {
 
     /**
      * Berechnet die Veränderungen in Int-Werten von einem Punkt zum nächsten Punkt und erstellt daraus eine Liste.
+     * Beispiel: Input: (1, 2, 4, 7, 11) Output: (1, 2, 3, 4)
      * @return - Eine Liste mit der Veränderung in Int-Werten von Punkt x zu Punkt x + 1
      */
     public List<Integer> gradientsInt() {
@@ -72,7 +74,7 @@ public class XYGraph {
     }
 
     /**
-     * Gibt den Teilgraphen zurück, der links vom maximalen Wert liegt.
+     * Gibt den Teil-XYGraph zurück, der links vom maximalen Wert liegt.
      * @return
      */
     public XYGraph downGraph() {
@@ -87,7 +89,7 @@ public class XYGraph {
     }
 
     /**
-     * Gibt den Teilgraphen zurück, der rechts vom maximalen Wert liegt.
+     * Gibt den Teil-XYGraph zurück, der rechts vom maximalen Wert liegt.
      * @return
      */
     public XYGraph upGraph() {

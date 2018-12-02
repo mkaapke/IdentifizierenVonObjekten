@@ -13,10 +13,10 @@ public class XYHill {
     /**
      * Der XYHill erwartet einen XYGraph, der die x-Ansicht darstellt und einen XYGraph für die y-Ansicht.
      * Die x und y Koordinate ist der Höhepunkt des XYHill´s.
-     * @param xValues
-     * @param yValues
-     * @param x
-     * @param y
+     * @param xValues - Die x-Ansicht des XYHill´s
+     * @param yValues - Die y-Ansicht des XYHill´s
+     * @param x - x-Koordiante des Höhepunktes
+     * @param y - y-Koordiante des Höhepunktes
      */
     public XYHill(XYGraph xValues, XYGraph yValues, Integer x, Integer y) {
         this.xValues = xValues;

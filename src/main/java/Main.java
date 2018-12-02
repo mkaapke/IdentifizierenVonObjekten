@@ -19,6 +19,7 @@ public class Main {
      */
     private final static int testdata = 1000;
 
+    //Pfade für die Dateien
     private final static String dataPath = "src/main/data2.csv";
     private final static String trainingDataAPath = "src/main/A0.csv";
     private final static String trainingDataBPath = "src/main/B0.csv";
