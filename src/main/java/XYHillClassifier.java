@@ -215,39 +215,27 @@ public class XYHillClassifier {
      * @param bHills Liste mit Objekten
      */
     public boolean training(List<XYHill> aHills, List<XYHill> bHills) {
-        if (aHills.size() == 0) {
+
+        if (aHills.isEmpty()) {
             System.out.println("Keine Daten für die A-Objekte, trainieren nicht möglich");
             isTrained = false;
             return false;
         }
 
-        if (bHills.size() == 0) {
+        if (bHills.isEmpty()) {
             System.out.println("Keine Daten für die B-Objekte, trainieren nicht möglich");
             isTrained = false;
             return false;
         }
 
         System.out.println("---------AOBJEKTE: " + aHills.size() + "----------");
-
-        double flatA = amountObjectFlat(aHills);
-        double symA = amountObjectSym(aHills);
-        double sharpA = amountObjectSharp(aHills);
-
         System.out.println("--Flat " + amountObjectFlat(aHills));
         System.out.println("--Sym " + amountObjectSym(aHills));
         System.out.println("--Sharp " + amountObjectSharp(aHills));
-
         System.out.println("---------BOBJEKTE: " + bHills.size() + "----------");
-
-        double flatB = amountObjectFlat(bHills);
-        double symB = amountObjectSym(bHills);
-        double sharpB = amountObjectSharp(bHills);
-
         System.out.println("--Flat " + amountObjectFlat(bHills));
         System.out.println("--Sym " + amountObjectSym(bHills));
         System.out.println("--Sharp " + amountObjectSharp(bHills));
-
-        System.out.println("------Bayes-----");
 
         pAsym = amountObjectSym(aHills) /  aHills.size();
         pAabruptRise = amountObjectSharp(aHills) /  aHills.size();
