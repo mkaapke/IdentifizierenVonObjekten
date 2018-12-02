@@ -18,9 +18,13 @@ public class Main {
      * Definiert, wie viele Testdaten aus der A und B-Listen eingelesen werden sollen.
      */
     private final static int testdata = 1000;
+    /**
+     * Die Reichweite, in der eine neue Matrix beim Suchen um einen Punkt aufgebaut wird, wenn getHills aufgerufen wird.
+     */
+    private final static int matrixSearchRange = 10;
 
     //Pfade für die Dateien
-    private final static String dataPath = "src/main/data2.csv";
+    private final static String dataPath = "src/main/data.csv";
     private final static String trainingDataAPath = "src/main/A0.csv";
     private final static String trainingDataBPath = "src/main/B0.csv";
     private final static String testDataAPath = "src/main/A1.csv";
@@ -46,7 +50,7 @@ public class Main {
         List<XYPoint> b1Points = getPoints(new CSVReader(b1));
 
         XYMatrix xyMatrix = new XYMatrix();
-        XYHillClassifier classifier;
+        XYHillClassifier classifier = new XYHillClassifier();
 
         /*
         Eine Map wird mit der von datasize vordefinierten Anzahl von Zeilen der data.csv Datei gefüllt
@@ -64,11 +68,10 @@ public class Main {
         }
         readerData.close();
 
-        classifier = new XYHillClassifier();
-        classifier.training(xyMatrix.getHills(a0Points), xyMatrix.getHills(b0Points));
+        classifier.training(xyMatrix.getHills(a0Points, matrixSearchRange), xyMatrix.getHills(b0Points, matrixSearchRange)); //Trainieren der Daten
         System.out.println("-------------------------------------");
-        Double falsePositives = (100.0 / a1Points.size()) * classifier.findABObjects(xyMatrix.getHills(a1Points), false).size();
-        Double truePositives = (100.0 / b1Points.size()) * classifier.findABObjects(xyMatrix.getHills(b1Points), false).size();
+        Double falsePositives = (100.0 / a1Points.size()) * classifier.findABObjects(xyMatrix.getHills(a1Points, matrixSearchRange), false).size(); //Klassifizieren
+        Double truePositives = (100.0 / b1Points.size()) * classifier.findABObjects(xyMatrix.getHills(b1Points, matrixSearchRange), false).size(); //Klassifizieren
         System.out.println("B-False Positives: "  + falsePositives + "%" );
         System.out.println("B-True Positives: "  + truePositives + "%" );
     }
@@ -97,9 +100,9 @@ public class Main {
         List<XYPoint> points = new ArrayList<>();
         String[] liste = {};
         while ((liste = reader.readNext()) != null) {
-            if (Integer.valueOf(liste[1]) < datasize) {
+            if (Integer.valueOf(liste[1]) < datasize) { //Wenn die x-Koordinate größter ist, als die Anzahl an Reihen in der Matrix, soll der Punkt nicht hinzugefügt werden.
                 points.add(new XYPoint(Integer.valueOf(liste[1]), Integer.valueOf(liste[0])));
-                if (++counter == testdata) break;
+                if (++counter == testdata) break; //Wenn der Counter die Anzahl an Testdaten erreicht hat, soll die Schleife verlassen werden.
             }
         }
         reader.close();

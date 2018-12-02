@@ -7,18 +7,13 @@ import java.util.*;
 public class XYMatrix {
 
     /**
-     * Die Reichweite, in der eine neue Matrix beim Suchen um ein Punkt aufgebaut wird, wenn getHills aufgerufen wird.
-     */
-    private static int searchRange = 10;
-
-    /**
      * Die Map stellt die Matrix da. Der Key sind die x-Punkte und die y-Punkte als Liste.
      * Der Index der Liste sind die y-Punkte und die Werte der Liste die z-Werte.
      */
     private Map<Integer, List<Integer>> values = new HashMap();
     /**
-     * Da das Aufbauen einer großen Matrix lange dauert und das transportieren ebenfalls, wird die transportierte Matrix,
-     * wenn sie einmal transportiert wurde, abgespeichert.
+     * Da das Aufbauen einer großen Matrix lange dauert und das transponieren ebenfalls, wird die transponierte Matrix,
+     * wenn sie einmal transponiert wurde, abgespeichert.
      */
     private XYMatrix transposed = null;
 
@@ -32,7 +27,7 @@ public class XYMatrix {
         if (values.containsKey(x)) { //Wenn es schon ein Key x gibt, dann muss die value-Liste nur erweitert werden.
             values.get(x).add(value);
         } else { //Ansonsten wird eine neue Liste angelegt und der Wert als erster Eintrag hinzugefügt
-            values.put(x, new ArrayList<Integer>());
+            values.put(x, new ArrayList<>());
             values.get(x).add(value);
         }
         return values.get(x).indexOf(value);
@@ -54,11 +49,11 @@ public class XYMatrix {
     }
 
     /**
-     * Transportiert die Matrix.
-     * @return - die transportierte Matrix.
+     * Transponiert die Matrix.
+     * @return - die transponierte Matrix.
      */
     public XYMatrix transpose() {
-        if (transposed != null) return transposed; //Falls bereits transportiert wurde, gebe die gespeicherte transportierte Matrix zurück
+        if (transposed != null) return transposed; //Falls bereits transponiert wurde, gebe die gespeicherte transponierte Matrix zurück
         XYMatrix xyMatrix = new XYMatrix();
         for (int i = 0; i < values.get(1).size(); i++) {
             for (int y = 1; y <= values.size(); y++) {
@@ -161,7 +156,7 @@ public class XYMatrix {
 
     /**
      * Es wird ein XYHill erstellt von den Koordianten x, y aus.
-     * Zu beachten ist, dass für die y-Ansicht, die Matrix transportiert wird und bei dem Aufruf
+     * Zu beachten ist, dass für die y-Ansicht, die Matrix transponiert wird und bei dem Aufruf
      * findGraphinRow, die Koordianten einmal getauscht werden müssen.
      * @param x - Koordinate x
      * @param y - Koordinate y
@@ -177,7 +172,7 @@ public class XYMatrix {
      * @param points - Liste mit Koordinaten, aus denen XYHills gefunden und erstellt werden sollen
      * @return - Liste mit den resultierenden XYHills.
      */
-    public List<XYHill> getHills(List<XYPoint> points) {
+    public List<XYHill> getHills(List<XYPoint> points, Integer searchRange) {
         List<XYHill> hills = new ArrayList<XYHill>();
 
         for (XYPoint p : points) {

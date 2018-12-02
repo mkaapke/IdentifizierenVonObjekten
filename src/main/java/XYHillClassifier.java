@@ -25,30 +25,29 @@ public class XYHillClassifier {
      */
     private static final int triggerSymetricPercent = 20;
     /**
-     * Definiert, ab wieviel Anzahl an symmetrischen Punkten in einem XYHill, der XYHill symmetrisch ist.
+     * Definiert, ab welcher Anzahl an symmetrischen Punkten in einem XYHill, der XYHill symmetrisch ist.
      */
     private static final int triggerSymetricInt = 5;
 
-
     //-----Parameter für die zu starke Steigung eines XYHill-----
     /**
-     * Definiert, wie hoch die Steigung (in Prozent) sein darf, damit sie als zu stark steigend gilt.
+     * Definiert, wie hoch die Steigung (in Prozent) sein darf, damit sie als stark steigend gilt.
      */
     private static final int abruptRise = 3;
     /**
      * Definiert, in welcher Reichweite jeweils am Anfang und Ende der XYGraphen für die x-Ansicht und y-Ansicht,
-     * nach einen zu stark steigenden Wert, gesucht wird.
+     * nach einem stark steigenden Wert gesucht wird.
      */
     private static final int abruptRiseRange = 3;
 
     //-----WAHRSCHEINLICHKEITEN-----
-    private static double pAsym; //Wahrscheinlichkeit für die Symmetrie eines AObjekt.
-    private static double pAabruptRise; //Wahrscheinlichkeit für die zu stark steigende Steigung eines AObjekt.
-    private static double pAflat; //Wahrscheinlichkeit für die Flachheit eines AObjekt.
+    private static double pAsym; //Wahrscheinlichkeit für die Symmetrie eines A-Objekt.
+    private static double pAabruptRise; //Wahrscheinlichkeit für die stark steigende Steigung eines A-Objekt.
+    private static double pAflat; //Wahrscheinlichkeit für die Flachheit eines A-Objekt.
 
-    private static double pBsym; //Wahrscheinlichkeit für die Symmetrie eines BObjekt.
-    private static double pBabruptRise; //Wahrscheinlichkeit für die zu stark steigende Steigung eines BObjekt.
-    private static double pBflat; //Wahrscheinlichkeit für die Flachheit eines ABObjekt.
+    private static double pBsym; //Wahrscheinlichkeit für die Symmetrie eines B-Objekt.
+    private static double pBabruptRise; //Wahrscheinlichkeit für die stark steigende Steigung eines B-Objekt.
+    private static double pBflat; //Wahrscheinlichkeit für die Flachheit eines B-Objekt.
 
     private boolean isTrained = false; //Der Klassifikator merkt sich, ob die Daten trainiert wurden.
 
@@ -172,8 +171,8 @@ public class XYHillClassifier {
 
     /**
      * Zählt die Anzahl an Objekten mit dem Attribut "Flatness" in einer vorgegebenen Liste aus Objekten.
-     * @param hills Liste mit Objekten
-     * @return Anzahl an Objekten mit dem Attribut "Flatness".
+     * @param - hills Liste mit Objekten
+     * @return - Anzahl an Objekten mit dem Attribut "Flatness".
      */
     private double amountObjectFlat(List<XYHill> hills) {
         double counter = 0;
@@ -185,8 +184,8 @@ public class XYHillClassifier {
 
     /**
      * Zählt die Anzahl an Objekten mit dem Attribut "Symmetrie" in einer vorgegebenen Liste aus Objekten.
-     * @param hills Liste mit Objekten
-     * @return Anzahl an Objekten mit dem Attribut "Symmetrie".
+     * @param - hills Liste mit Objekten
+     * @return - Anzahl an Objekten mit dem Attribut "Symmetrie".
      */
     private double amountObjectSym(List<XYHill> hills) {
         double counter = 0;
@@ -198,8 +197,8 @@ public class XYHillClassifier {
 
     /**
      * Zählt die Anzahl an Objekten mit dem Attribut "abruptRise" in einer vorgegebenen Liste aus Objekten.
-     * @param hills Liste mit Objekten
-     * @return Anzahl an Objekten mit dem Attribut "abruptRise".
+     * @param - hills Liste mit Objekten
+     * @return - Anzahl an Objekten mit dem Attribut "abruptRise".
      */
     private double amountObjectSharp(List<XYHill> hills) {
         double counter = 0;
@@ -211,8 +210,8 @@ public class XYHillClassifier {
 
     /**
      * Erstellt Trainingsdaten aus vorgegebenen Listen und setzt den Boolean "isTrained" auf true, sobald durchlaufen.
-     * @param aHills Liste mit Objekten
-     * @param bHills Liste mit Objekten
+     * @param aHills - Liste mit Objekten
+     * @param bHills - Liste mit Objekten
      */
     public boolean training(List<XYHill> aHills, List<XYHill> bHills) {
 
@@ -228,31 +227,31 @@ public class XYHillClassifier {
             return false;
         }
 
-        System.out.println("---------AOBJEKTE: " + aHills.size() + "----------");
-        System.out.println("--Flat " + amountObjectFlat(aHills));
+        System.out.println("---------A-OBJEKTE: " + aHills.size() + "----------");
         System.out.println("--Sym " + amountObjectSym(aHills));
-        System.out.println("--Sharp " + amountObjectSharp(aHills));
-        System.out.println("---------BOBJEKTE: " + bHills.size() + "----------");
-        System.out.println("--Flat " + amountObjectFlat(bHills));
+        System.out.println("--Flat " + amountObjectFlat(aHills));
+        System.out.println("--Abrupt Rise " + amountObjectSharp(aHills));
+        System.out.println("---------B-OBJEKTE: " + bHills.size() + "----------");
         System.out.println("--Sym " + amountObjectSym(bHills));
-        System.out.println("--Sharp " + amountObjectSharp(bHills));
+        System.out.println("--Flat " + amountObjectFlat(bHills));
+        System.out.println("--Abrupt Rise " + amountObjectSharp(bHills));
 
         pAsym = amountObjectSym(aHills) /  aHills.size();
-        pAabruptRise = amountObjectSharp(aHills) /  aHills.size();
         pAflat =   amountObjectFlat(aHills) /  aHills.size();
+        pAabruptRise = amountObjectSharp(aHills) /  aHills.size();
 
         pBsym = amountObjectSym(bHills) /  bHills.size();
-        pBabruptRise = amountObjectSharp(bHills) /  bHills.size();
         pBflat =  amountObjectFlat(bHills) /  bHills.size();
+        pBabruptRise = amountObjectSharp(bHills) /  bHills.size();
 
         System.out.println("-----Wahrscheinlichkeiten A -----");
         System.out.println(("P(Sym|A) = " + pAsym));
-        System.out.println(("P(Sharp|A) = " + pAabruptRise));
         System.out.println(("P(Flat|A) = " + pAflat));
+        System.out.println(("P(Abrupt Rise|A) = " + pAabruptRise));
         System.out.println("-----Wahrscheinlichkeiten B -----");
         System.out.println(("P(Sym|B) = " + pBsym));
-        System.out.println(("P(Sharp|B) = " + pBabruptRise));
         System.out.println(("P(Flat|B) = " + pBflat));
+        System.out.println(("P(Abrupt Rise|B) = " + pBabruptRise));
 
         isTrained = true;
         return true;

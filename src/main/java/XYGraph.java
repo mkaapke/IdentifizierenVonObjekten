@@ -2,13 +2,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Stellt einen Graphen da. Besteht aus einem X-Wert und einer Liste aus Y-Werten.
+ * Stellt einen Graphen da. Besteht aus einem x-Wert und einer Liste aus y-Werten.
  */
 public class XYGraph {
 
-    private Integer x;
+    private Integer x; //x-Koordinate
+
+    /**
+     * Ein XYGraph hat eine Liste mit y-Werten.
+     */
     private List<Integer> valuesY = new ArrayList<Integer>();
 
+    /**
+     * Der Konstruktor erwartet eine x-Koordinate.
+     * @param x - die x-Koordinate
+     */
     public XYGraph(Integer x) {
         this.x = x;
     }
@@ -75,7 +83,7 @@ public class XYGraph {
 
     /**
      * Gibt den Teil-XYGraph zurück, der links vom maximalen Wert liegt.
-     * @return
+     * @return - Teil-XYGraph, der links vom maximalen Wert liegt
      */
     public XYGraph downGraph() {
         XYGraph graph = new XYGraph(this.x);
@@ -90,7 +98,7 @@ public class XYGraph {
 
     /**
      * Gibt den Teil-XYGraph zurück, der rechts vom maximalen Wert liegt.
-     * @return
+     * @return - Teil-XYGraph, der rechts vom maximalen Wert liegt
      */
     public XYGraph upGraph() {
         XYGraph graph = new XYGraph(this.x);

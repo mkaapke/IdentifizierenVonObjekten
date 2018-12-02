@@ -5,10 +5,10 @@
  */
 public class XYHill {
 
-    private XYGraph xValues;
-    private XYGraph yValues;
-    private Integer x;
-    private Integer y;
+    private XYGraph xValues; //XYGraph für die x-Ansicht
+    private XYGraph yValues; //XYGraph für die y-Ansicht
+    private Integer x; //x-Koordinate
+    private Integer y; //y-Koordinate
 
     /**
      * Der XYHill erwartet einen XYGraph, der die x-Ansicht darstellt und einen XYGraph für die y-Ansicht.

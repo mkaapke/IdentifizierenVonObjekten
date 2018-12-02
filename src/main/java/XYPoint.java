@@ -3,9 +3,9 @@
  */
 public class XYPoint {
 
-    public Integer x;
+    public Integer x; //x-Koordinate
 
-    public Integer y;
+    public Integer y; //y-Koordinate
 
     /**
      * Der Konstruktor erwartet eine x und y Koordinate als Integer.
